@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }} - My Django Application</title>
+    <title>{{ title }}</title>
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
@@ -12,8 +12,11 @@
 </head>
 
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+    <div class="navbar navbar-inverse navbar-fixed-top">        
+        <div id="logo" style="float:left;">
+                <img src="{% static 'sdg_white_logo.png' %}" />
+        </div>
+        <div class="container">            
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
@@ -34,50 +37,50 @@
     </div>
     {% if user.is_authenticated %}
     <div class="nav-side-menu">
-      <i class="fa fa-bars fa-2x toggle-btn" data-toggle="show" data-target="#menu-content"></i>
+      <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
           <div class="menu-list">
   
             <ul id="menu-content" class="menu-content">
 
-                <li data-toggle="show" data-target="#dashboard-submenu" class="collapsed">
-                  <a href="#"><i class="fa fa-dashboard fa-lg"></i> Main Dashboard<span class="arrow"></span></a>                  
+                <li data-toggle="collapse" data-target="#dashboard-submenu" class="collapsed">
+                  <a href="#"><i class="fa fa-dashboard fa-lg"></i> Main Dashboard</a><span class="arrow"></span>                 
                 </li>
-                <ul class="sub-menu show" id="dashboard-submenu">                    
-                    <li><a href="{% url 'mainDashboardEntityLevel' %}">Entity Level</a></li>
-                    <li><a href="{% url 'mainDashboardVendorLevel' %}">Vendor Level</a></li>                         
+                <ul class="sub-menu collapse" id="dashboard-submenu">                    
+                    <li><a href="#" onclick="return mainDashboardEntityLevel();">Entity Level</a></li>
+                    <li><a href="#" onclick="return mainDashboardVendorLevel();">Vendor Level</a></li>                         
                 </ul>                
 
-                <li data-toggle="show" data-target="#mot_analysis_submenu" class="collapsed">
-                  <a href="#"><i class="fa fa-globe fa-lg"></i> MOT Analysis <span class="arrow"></span></a>
+                <li data-toggle="collapse" data-target="#mot_analysis_submenu" class="collapsed">
+                  <a href="#"><i class="fa fa-globe fa-lg"></i> MOT Analysis </a><span class="arrow"></span> 
                 </li>  
-                <ul class="sub-menu show" id="mot_analysis_submenu">
-                  <li>Value Growth</li>
-                  <li>MOQ</li>
-                  <li>Lead Time</li>
-                  <li>Margin</li>
+                <ul class="sub-menu collapse" id="mot_analysis_submenu">
+                  <li><a href="#" onclick="return valueGrowth();">Value Growth</a></li>
+                  <li><a href="#" onclick="return moq();">MOQ</a></li>
+                  <li><a href="#" onclick="return leadTime();">Lead Time</a></li>
+                  <li><a href="#" onclick="return margin();">Margin</a></li>                  
                 </ul>
 
 
-                <li data-toggle="show" data-target="#costing_submenu" class="collapsed">
-                  <a href="#"><i class="fa fa-car fa-lg"></i> Costing Analysis <span class="arrow"></span></a>
+                <li data-toggle="collapse" data-target="#costing_submenu" class="collapsed">
+                  <a href="#"><i class="fa fa-car fa-lg"></i> Costing Analysis </a><span class="arrow"></span> 
                 </li>
-                <ul class="sub-menu show" id="costing_submenu">
-                  <li>Methodology</li>
-                  <li>Cost Input</li>
-                  <li>Cost Price Evolution</li>
+                <ul class="sub-menu collapse" id="costing_submenu">
+                  <li><a href="#" onclick="return methodology();">Methodology</a></li>
+                  <li><a href="#" onclick="return costInput();">Cost Input</a></li>
+                  <li><a href="#" onclick="return costPriceEvolution();">Cost Price Evolution</a></li>
                 </ul>
 
 
-                 <li data-toggle="show" data-target="#assumption_submenu" class="collapsed">
-                  <a href="#"><i class="fa fa-user fa-lg"></i> Assumptions <span class="arrow"></span></a>                  
+                 <li data-toggle="collapse" data-target="#assumption_submenu" class="collapsed">
+                  <a href="#"><i class="fa fa-user fa-lg"></i> Assumptions</a><span class="arrow"></span>                   
                  </li>
-                 <ul class="sub-menu show" id="assumption_submenu">
-                  <li>Commodity Data</li>
-                  <li>Labor Rate</li>
-                  <li>Currency</li>
-                  <li>Inflation</li>
-                  <li>Duty Scenario</li>
-                  <li>Standard Process</li>
+                 <ul class="sub-menu collapse" id="assumption_submenu">
+                  <li><a href="#" onclick="return commodityData();">Commodity Data</a></li>
+                  <li><a href="#" onclick="return laborRate();">Labor Rate</a></li>
+                  <li><a href="#" onclick="return currency();">Currency</a></li>
+                  <li><a href="#" onclick="return inflation();">Inflation</a></li>
+                  <li><a href="#" onclick="return dutyScenario();">Duty Scenario</a></li>
+                  <li><a href="#" onclick="return standardProcess();">Standard Process</a></li>                     
                  </ul>
                  
             </ul>
@@ -87,17 +90,146 @@
 
 
     <div class="container body-content">
-        {% block content %}{% endblock %}
+        <div id="main_body">
+            {% block content %}{% endblock %}
+        </div>
+                
         <hr/>
         <footer>
-            <p>&copy; {{ year }} - My Django Application</p>
+            <p>&copy; {{ year }} - Strategic Decisions Group</p>
         </footer>
     </div>
 
     <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
     <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
     <script src="{% static 'app/scripts/respond.js' %}"></script>
-{% block scripts %}{% endblock %}
+    
+    <script>
+        function mainDashboardEntityLevel(){
+                $.ajax({
+                    url: '{% url 'mainDashboardEntityLevel' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+               }
 
+        function mainDashboardVendorLevel(){
+                $.ajax({
+                    url: '{% url 'mainDashboardVendorLevel' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+               }
+
+        function valueGrowth(){
+                $.ajax({
+                    url: '{% url 'valueGrowth' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+               }
+        
+        function moq(){
+                $.ajax({
+                    url: '{% url 'moq' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+               }
+        function leadTime(){
+                $.ajax({
+                    url: '{% url 'leadTime' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+
+        function margin(){
+            $.ajax({
+                    url: '{% url 'margin' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function methodology(){
+            $.ajax({
+                    url: '{% url 'methodology' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function costInput(){
+            $.ajax({
+                    url: '{% url 'costInput' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function costPriceEvolution(){
+            $.ajax({
+                    url: '{% url 'costPriceEvolution' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function commodityData(){
+            $.ajax({
+                    url: '{% url 'commodityData' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function laborRate(){
+            $.ajax({
+                    url: '{% url 'laborRate' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function currency(){
+            $.ajax({
+                    url: '{% url 'currency' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function inflation(){
+            $.ajax({
+                    url: '{% url 'inflation' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function dutyScenario(){
+            $.ajax({
+                    url: '{% url 'dutyScenario' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function standardProcess(){
+            $.ajax({
+                    url: '{% url 'standardProcess' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+    </script>
+    {% block scripts %}{% endblock %}
 </body>
 </html>

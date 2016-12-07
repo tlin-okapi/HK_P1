@@ -54,8 +54,26 @@
     <Folder Include="KingfisherHK\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\static\app\content\d3test.css" />
+    <Content Include="app\static\app\scripts\d3.js" />
+    <Content Include="app\static\app\scripts\d3.min.js" />
+    <Content Include="app\static\app\scripts\JavaScript.js" />
+    <Content Include="app\static\sdg_white_logo.png" />
+    <Content Include="app\templates\app\commodityData.html" />
+    <Content Include="app\templates\app\costInput.html" />
+    <Content Include="app\templates\app\costPriceEvolution.html" />
+    <Content Include="app\templates\app\currency.html" />
+    <Content Include="app\templates\app\dutyScenario.html" />
     <Content Include="app\templates\app\entityLevel.html" />
+    <Content Include="app\templates\app\inflation.html" />
+    <Content Include="app\templates\app\laborRate.html" />
+    <Content Include="app\templates\app\leadTime.html" />
+    <Content Include="app\templates\app\margin.html" />
+    <Content Include="app\templates\app\methodology.html" />
+    <Content Include="app\templates\app\moq.html" />
+    <Content Include="app\templates\app\standardProcess.html" />
     <Content Include="app\templates\app\vendorLevel.html" />
+    <Content Include="app\templates\app\valueGrowth.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />
