@@ -1,1 +1,27 @@
-﻿<h1>labor Rate</h1>
+﻿
+<h1>labor Rate</h1>
+
+<div id="test">
+
+</div>
+
+{% block scripts %}
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
+<script src="{% static 'app/scripts/d3.js' %}"></script>
+<script type="text/javascript">
+
+    // D3 js code
+    d3.select("#main_body").select("#test")
+        .data(dataset) // <-- The answer is here!
+        .enter()
+        .append("div")
+        .attr("class", "bar")
+        .style("height", function (d) {
+            var barHeight = d * 5;
+            return barHeight + "px";
+        });
+
+
+ </script>
+{% endblock %}

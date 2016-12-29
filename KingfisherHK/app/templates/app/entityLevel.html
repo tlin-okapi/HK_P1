@@ -2,39 +2,83 @@
 <br/>
 <table>
     <tr>
-        <td>
+        <td id="top_left">
+            <h4>Money on the table by category</h4>
+            <table border="1">
+                <tr>
+                    <td> Total Shipment Value (US$ M) 
+                    <svg width="50" height="50">
+                        <g>
+                            <circle cx="25" cy="25" r="22" fill="orange" stroke="gray" stroke-width="2"/>
+                            <text x="10" y="25" font-family="Verdana" font-size="10" fill="blue" > 1,960 </text>    
+                        </g> 
+                        
+                    </svg>                    
+                    </td> 
+                    <td>Money on the Table (US$ M) 
+                    <svg width="50" height="50">
+                        <g>
+                            <circle cx="25" cy="25" r="22" fill="orange" stroke="gray" stroke-width="2"/>
+                            <text x="10" y="25" font-family="Verdana" font-size="10" fill="blue" > 42.2 </text>    
+                        </g>                         
+                    </svg>                    
+                    </td>
+                    <td>
+                        <text style="color:red;"> 2.2% </text>  of Total Ship. Val
+                    </td>
+                </tr>
+            </table>
 
         </td>
-        <td>
+        <td id="top_right">
 
         </td>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
+        <td id="bottom_left">
+
+        </td>
+        <td id="bottom_right">
+
+        </td>
     </tr>
-</table>    
+</table> 
 
-
-<div class="bar"></div>
+<!-- <div class="bar"></div> -->
 
 {% block scripts %}
 {% load staticfiles %}
 <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
 <script src="{% static 'app/scripts/d3.js' %}"></script>
-<script type="text/javascript">
+<script src="{% static 'app/scripts/dimple.v2.3.0.min.js' %}"></script>
+<script type="text/javascript">       
+    function draw(data){
+        var margin = 75,
+            width = 1400 - margin,
+            height = 600 - margin;
+        
+        var svg = d3.select("#main_body")
+            .append("div")
+            .append("svg")
+                .attr("width", width + margin)
+                .attr("height", height + margin)
+            .append('g')
+                .attr('class', 'chart');
     
-    var dataset = [5, 10, 15, 20, 25];
-
-    d3.select("#main_body").selectAll("div")
-        .data(dataset) // <-- The answer is here!
-        .enter()
-        .append("div")
-        .attr("class", "bar")
-        .style("height", function (d) {
-            var barHeight = d * 5;            
-            return barHeight + "px";
-    });
+        var myChart = new dimple.chart(svg, data);
+        myChart.setBounds(75, 30, 490, 330)
+        //var x = myChart.addTimeAxis("x", "year"); 
+        //myChart.addMeasureAxis("y", "attendance");
+        myChart.addMeasureAxis("x", "attendance");
+        var y = myChart.addTimeAxis("y", "year"); 
+        y.dateParseFormat = "%Y"
+        y.tickFormat = "%Y";
+        y.timeInterval = 4;
+        //myChart.addSeries(null, dimple.plot.line);
+        myChart.addSeries(null, dimple.plot.bar);
+        myChart.draw();
+    };
+    
+    d3.tsv("{% static 'world_cup.tsv' %}", draw);
 </script>
-
 {% endblock %}
