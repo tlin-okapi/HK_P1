@@ -1,9 +1,9 @@
 ﻿<h1>Main Dashboard - Entity Level!</h1>
 <br/>
-<table>
+<table  border="1">
     <tr>
         <td id="top_left">
-            <h4>Money on the table by category</h4>
+            <h4>Money on the Table by Category</h4>
             <table border="1">
                 <tr>
                     <td> Total Shipment Value (US$ M) 
@@ -29,17 +29,64 @@
                 </tr>
             </table>
 
+            <div id="topLeftChart"></div>
+
         </td>
         <td id="top_right">
+            <h4>Money on the Table - Top Vendors</h4>
+            <table border="1">
+                <tr>
+                    <td> Total Shipment Value (US$ M) 
+                    <svg width="50" height="50">
+                        <g>
+                            <circle cx="25" cy="25" r="22" fill="orange" stroke="gray" stroke-width="2"/>
+                            <text x="10" y="25" font-family="Verdana" font-size="10" fill="blue" > 137.0 </text>    
+                            <text style="color:red;"> 6.9% </text>  of Total Ship. Val
+                        </g> 
+                        
+                    </svg>                    
+                    </td> 
+                    <td>Money on the Table (US$ M) 
+                    <svg width="50" height="50">
+                        <g>
+                            <circle cx="25" cy="25" r="22" fill="orange" stroke="gray" stroke-width="2"/>
+                            <text x="10" y="25" font-family="Verdana" font-size="10" fill="blue" > 9.0 </text>    
+                            <text style="color:red;"> 21% </text>  of Total MOT
+                        </g>                         
+                    </svg>                    
+                    </td>                    
+                </tr>
+            </table>
 
+            <div id="topRightChart"></div>
         </td>
     </tr>
     <tr>
         <td id="bottom_left">
-
+            <h4>Contributions by Different Sourcing Office</h4>
+            <div id="bottomLeftChart"></div>
         </td>
-        <td id="bottom_right">
-
+        <td id="bottom_right" style="vertical-align:top; text-align: left;">
+            <h4>Key Commodities Movement</h4>
+            <div id="bottomRightChart">
+                <table style="width:100%" border="1">
+                  <tr>
+                    <th>Firstname</th>
+                    <th>Lastname</th> 
+                    <th>Age</th>
+                  </tr>
+                  <tr>
+                    <td>Jill</td>
+                    <td>Smith</td> 
+                    <td>50</td>
+                  </tr>
+                  <tr>
+                    <td>Eve</td>
+                    <td>Jackson</td> 
+                    <td>94</td>
+                  </tr>
+                </table>
+            </div>
         </td>
     </tr>
 </table> 
@@ -54,11 +101,10 @@
 <script type="text/javascript">       
     function draw(data){
         var margin = 75,
-            width = 1400 - margin,
-            height = 600 - margin;
+            width = 700 - margin,
+            height = 400 - margin;
         
-        var svg = d3.select("#main_body")
-            .append("div")
+        var svg = d3.select("#topLeftChart")            
             .append("svg")
                 .attr("width", width + margin)
                 .attr("height", height + margin)
@@ -77,8 +123,42 @@
         //myChart.addSeries(null, dimple.plot.line);
         myChart.addSeries(null, dimple.plot.bar);
         myChart.draw();
+
+        var svgTopRight = d3.select("#topRightChart")            
+            .append("svg")
+                .attr("width", width + margin)
+                .attr("height", height + margin)
+            .append('g')
+                .attr('class', 'chart');
+    
+        var myTopToghtChart = new dimple.chart(svgTopRight, data);
+        myTopToghtChart.setBounds(75, 30, 490, 330)        
+        myTopToghtChart.addMeasureAxis("x", "attendance");
+        var y = myTopToghtChart.addTimeAxis("y", "year"); 
+        y.dateParseFormat = "%Y"
+        y.tickFormat = "%Y";
+        y.timeInterval = 4;        
+        myTopToghtChart.addSeries(null, dimple.plot.bar);
+        myTopToghtChart.draw();
+
+        
+        var svgBottomLeft = dimple.newSvg("#bottomLeftChart", 590, 400);
+        d3.tsv("{% static 'example_data.tsv' %}", function (data) {
+          var mybottomLeftChart = new dimple.chart(svgBottomLeft, data);
+          mybottomLeftChart.setBounds(20, 20, 460, 360)
+          mybottomLeftChart.addMeasureAxis("p", "Unit Sales");
+          mybottomLeftChart.addSeries("Owner", dimple.plot.pie);
+          mybottomLeftChart.addLegend(500, 20, 90, 300, "left");
+          mybottomLeftChart.draw();
+        });
+
+        
+        
+
     };
     
     d3.tsv("{% static 'world_cup.tsv' %}", draw);
+
+
 </script>
 {% endblock %}

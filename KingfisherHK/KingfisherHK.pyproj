@@ -59,6 +59,9 @@
     <Content Include="app\static\app\scripts\d3.min.js" />
     <Content Include="app\static\app\scripts\dimple.v2.3.0.min.js" />
     <Content Include="app\static\app\scripts\JavaScript.js" />
+    <Content Include="app\static\app\scripts\laborRateChart.js" />
+    <Content Include="app\static\app\scripts\laborRateTable.js" />
+    <Content Include="app\static\example_data.tsv" />
     <Content Include="app\static\sdg_white_logo.png" />
     <Content Include="app\static\world_cup.tsv" />
     <Content Include="app\templates\app\commodityData.html" />

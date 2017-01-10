@@ -1,1 +1,74 @@
-﻿    <h1> This is the main dashboard - vendor level </h1>
+﻿<h1> This is the main dashboard - vendor level </h1>
+<br/>
+<table  border="1">
+   <tr>
+        <td id="left">
+            <h4>Business Performance Overview </h4>
+            
+            <div id="leftChart1"></div>
+            <div id="leftChart2"></div>
+            <div id="leftChart3"></div>
+
+        </td>        
+    
+    
+        <td id="right">
+            <h4>Money on the Table Summary</h4>
+            
+        </td>
+    </tr>
+</table> 
+
+<!-- <div class="bar"></div> -->
+
+{% block scripts %}
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
+<script src="{% static 'app/scripts/d3.js' %}"></script>
+<script src="{% static 'app/scripts/dimple.v2.3.0.min.js' %}"></script>
+<script type="text/javascript">       
+    function draw(data){
+        var margin = 75,
+            width = 700 - margin,
+            height = 400 - margin;
+        
+        var svg = d3.select("#leftChart1")            
+            .append("svg")
+                .attr("width", width + margin)
+                .attr("height", height + margin)
+            .append('g')
+                .attr('class', 'chart');
+    
+        var myChart = new dimple.chart(svg, data);
+        myChart.setBounds(75, 30, 490, 330)
+        var x = myChart.addTimeAxis("x", "year"); 
+        myChart.addMeasureAxis("y", "attendance");
+        myChart.addMeasureAxis("x", "attendance");
+        var y = myChart.addTimeAxis("y", "year"); 
+        x.dateParseFormat = "%Y"
+        x.tickFormat = "%Y";
+        x.timeInterval = 4;        
+        myChart.addSeries(null, dimple.plot.bar);
+        myChart.addSeries(null, dimple.plot.line);
+        myChart.addSeries(null, dimple.plot.scatter);
+        myChart.draw();
+
+        var scatter = document.getElementsByClassName("dimple-series-2");
+        var bars = document.getElementsByClassName("dimple-series-0");
+        var line = document.getElementById("dimple-all");
+        
+        line.style.stroke = "black";
+        for (i = 0; i < scatter.length; i++) {
+            scatter[i].style.fill = "black";
+        }
+        for (j = 0; j < bars.length; j++) {
+            bars[j].style.fill = "red";
+        }
+    
+    };
+    
+    d3.tsv("{% static 'world_cup.tsv' %}", draw);
+
+
+</script>
+{% endblock %}
