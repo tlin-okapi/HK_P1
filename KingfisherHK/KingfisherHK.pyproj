@@ -4,8 +4,9 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <Name>KingfisherHK</Name>
     <RootNamespace>KingfisherHK</RootNamespace>
-    <InterpreterId>{92b40689-2ad1-4fef-93e0-6f10c069af56}</InterpreterId>
+    <InterpreterId>{0654d155-9b88-4282-8b7c-72a543773cef}</InterpreterId>
     <InterpreterVersion>2.7</InterpreterVersion>
+    <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -48,19 +49,52 @@
     <Folder Include="app\static\app\" />
     <Folder Include="app\static\app\content\" />
     <Folder Include="app\static\app\fonts\" />
+    <Folder Include="app\static\app\logo\" />
     <Folder Include="app\static\app\scripts\" />
+    <Folder Include="app\static\app\scripts\site\" />
+    <Folder Include="app\static\app\scripts\templates\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
     <Folder Include="KingfisherHK\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\static\app\content\d3test.css" />
+    <Content Include="app\static\app\content\dc.css" />
+    <Content Include="app\static\app\content\dc.min.css" />
+    <Content Include="app\static\app\logo\cost_input_select_1_1.png" />
+    <Content Include="app\static\app\logo\cost_input_select_1_2.png" />
+    <Content Include="app\static\app\logo\cost_input_select_1_3.png" />
+    <Content Include="app\static\app\logo\cost_input_select_1_4.png" />
+    <Content Include="app\static\app\logo\cost_input_select_1_5.png" />
+    <Content Include="app\static\app\logo\cost_input_select_1_6.png" />
+    <Content Include="app\static\app\logo\geolocation.png" />
+    <Content Include="app\static\app\logo\hk.png" />
+    <Content Include="app\static\app\logo\hk_2.png" />
+    <Content Include="app\static\app\logo\index_slide_1.jpg" />
+    <Content Include="app\static\app\logo\index_slide_2.jpg" />
+    <Content Include="app\static\app\logo\index_slide_5.jpg" />
+    <Content Include="app\static\app\logo\methodology.png" />
+    <Content Include="app\static\app\logo\process.png" />
+    <Content Include="app\static\app\logo\risk.png" />
+    <Content Include="app\static\app\logo\sdg_white_logo.png" />
+    <Content Include="app\static\app\logo\standard_process.png" />
+    <Content Include="app\static\app\logo\strategic.png" />
+    <Content Include="app\static\app\logo\tbd.png" />
+    <Content Include="app\static\app\scripts\crossfilter.js" />
+    <Content Include="app\static\app\scripts\crossfilter.min.js" />
+    <Content Include="app\static\app\scripts\d3-dc.js" />
+    <Content Include="app\static\app\scripts\d3-dc.min.js" />
     <Content Include="app\static\app\scripts\d3.js" />
     <Content Include="app\static\app\scripts\d3.min.js" />
+    <Content Include="app\static\app\scripts\dc.js" />
+    <Content Include="app\static\app\scripts\dc.min.js" />
     <Content Include="app\static\app\scripts\dimple.v2.3.0.min.js" />
     <Content Include="app\static\app\scripts\JavaScript.js" />
     <Content Include="app\static\app\scripts\laborRateChart.js" />
     <Content Include="app\static\app\scripts\laborRateTable.js" />
+    <Content Include="app\static\app\scripts\site\common-utility.js" />
+    <Content Include="app\static\app\scripts\templates\currency.js" />
+    <Content Include="app\static\app\scripts\templates\laborRateChart.js" />
     <Content Include="app\static\example_data.tsv" />
     <Content Include="app\static\sdg_white_logo.png" />
     <Content Include="app\static\world_cup.tsv" />
@@ -116,6 +150,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <InterpreterReference Include="{0654d155-9b88-4282-8b7c-72a543773cef}\2.7" />
     <InterpreterReference Include="{92b40689-2ad1-4fef-93e0-6f10c069af56}\2.7" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Django.targets" />

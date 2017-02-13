@@ -1,1 +1,261 @@
-﻿<h1>MOQ</h1>
+﻿<div class="row">
+	<div id="content" class="container col-md-10">
+		<h1>{{ title }}</h1>
+
+		<div id="data-table" style='clear:both;'>
+			<h3 align="center">MOQ Efficiency Savings</h3>
+			<table id="moq-table" class="table table-bordered table-hover table-responsive table-striped"></table>
+		</div>	<!-- .data-table -->
+
+		<div id="chart-line-shipment-moq">
+			<h3 align="center">Shipment Value & Volume by MOQ Category</h3>
+		</div>
+		
+		<div id="chart-bar-moq">
+			<h3 align="center">MOQ - Theoretical Saving Potential</h3>
+		</div>
+
+		
+		
+
+		
+	</div>	<!-- .content -->
+		
+	<!-- Filter placeholder. Actual filter selected will be added via Javascript -->
+	<div id="selectFilter" class="container col-md-2"></div>
+	
+
+</div>	<!-- .row -->
+
+<div id="tbd" class="col-md-12">
+	<br/>
+	<br/>
+	<h3>The following items are yet to be developed:</h3>
+	<li>Volume axis label should be rotated in reverse direction</li>
+</div>	<!-- .tbd -->
+
+
+{% block scripts %}
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'app/content/dc.min.css' %}" media="screen" /> 
+<script src="{% static 'app/scripts/crossfilter.min.js' %}"></script>
+<script src="{% static 'app/scripts/d3-dc.min.js' %}"></script>
+<script src="{% static 'app/scripts/dc.min.js' %}"></script>
+<script src="{% static 'app/scripts/site/common-utility.js' %}"></script> <!-- site specific filters to appear on right panel -->
+
+<script type="text/javascript">
+
+	/*******************************************************
+	Step 0: Set up Globals
+	********************************************************/
+	var debugFlag = 0;
+	var formatString_axis = ".2s";
+	var formatString_detail = ".4s";			
+	var formatFunction_axis = function(d) {return d3.format(formatString_axis)(d).replace("G","B");};
+	var formatFunction_detail = function(d) {return d3.format(formatString_detail)(d).replace("G","B");};
+	var contentWidth = d3.select("#content").style("width").replace("px", "");
+	var chartWidth = contentWidth * 0.9;
+	var chartHeight = 180;
+	var legend_x = 80;
+	var legend_y = 20;
+	var legend_itemHeight = 13;
+	var legend_gap = 5;
+
+	
+	/*******************************************************
+	Step 1: Prepare Data 
+	********************************************************/
+
+	var db_data = {{ data|safe }};
+	if (debugFlag) {
+		console.log("db_data"); console.log(db_data); // Debug
+	}
+	
+	/*******************************************************
+	Step 2: Create dc.js chart objects & link to div 
+	********************************************************/
+
+	var moqTbl = d3.select("#moq-table");
+	var shipCompositeChart  = dc.compositeChart("#chart-line-shipment-moq");
+	var moqBarChart   = dc.barChart("#chart-bar-moq");
+	
+	
+	/*******************************************************
+	Setp 3: Set up cross filter 
+	********************************************************/
+
+	var ndx = crossfilter(db_data);
+
+	/*******************************************************
+	Setp 4: Create dimensions
+	A dimention is something to group or filter by.
+	Crossfilter can filter by exact value or by range.
+	********************************************************/
+
+	var moqCatDim = ndx.dimension(function(d) {return d.fields.moq_category;});
+	var shipVal_group = moqCatDim.group().reduceSum(function(d) {return d.fields.sum_shipment_value;});
+	var shipVol_group = moqCatDim.group().reduceSum(function(d) {return d.fields.sum_order_quantity;});
+	var moq_group = moqCatDim.group().reduceSum(function(d) {return d.fields.sum_vendor_moq;});
+ 
+	if (debugFlag) {
+		console.log("moqCatDim"); console.log(moqCatDim); // Debug
+		console.log("shipVal_group"); console.log(shipVal_group); // Debug
+	}
+
+
+	/*******************************************************
+	Step 5: Create Main Charts for Visualization
+	********************************************************/
+	
+	// MOQ table
+	var moqIdxDim = ndx.dimension(function(d) {return d.fields.moq_category_index;});
+	var countMoqCat = moqIdxDim.top(1)[0].fields.moq_category_index;
+	if (debugFlag) {
+		console.log("countMoqCat"); console.log(countMoqCat); // Debug
+	}
+	var moqCat = new Array(countMoqCat-1);
+	var moqSave = new Array(countMoqCat-1);
+	var savePct;
+	for (var i=1; i<=countMoqCat; i ++) {
+		if (i>1) 
+			moqIdxDim.filterAll();
+		moqCat[i-1] = moqIdxDim.filter(i).top(1)[0].fields.moq_category;
+		if (debugFlag) {
+			console.log("moqCat[i]"); console.log(moqCat[i-1]); // Debug
+		}
+		var idx = i;
+		if (idx == 1)
+			savePct = '-2.0%';
+		else if (idx == 2)
+			savePct = '0.0%';
+		else if (idx == 3)
+			savePct = '0.0%';
+		else if (idx == 4)
+			savePct = '0.5%';
+		else if (idx == 5)
+			savePct = '1.0%';
+		else if (idx == 6)
+			savePct = '1.5%';
+		else
+			savePct = '2.0%';
+		moqSave[i-1] = savePct;
+	}	
+	if (debugFlag) {
+		console.log("moqCat"); console.log(moqCat); // Debug
+		console.log("moqSave"); console.log(moqSave); // Debug
+	}
+	// write out table header
+	var cells = moqTbl
+		.append('thead')
+		.append('tr')
+		.selectAll('th')
+		.data(moqCat)
+		.enter()
+		.append('th')
+		.text(function(d) {return d; })
+		.attr('align', 'center')
+		;		
+	// write out table content
+	var cells = moqTbl
+		.append('tbody')
+		.append('tr')
+		.selectAll('td')
+		.data(moqSave)
+		.enter()
+		.append('td')
+		.text(function(d) {return d; })
+		.attr('align', 'center')
+		;		
+	moqIdxDim.filterAll();
+	moqIdxDim.dispose();
+	
+	
+	
+	// Line chart
+	shipCompositeChart
+		.width(chartWidth)
+		.height(chartHeight)
+		.dimension(moqCatDim) 
+		.group(shipVal_group)		// set the group or else the ordinal scale won't work
+		.x(d3.scale.ordinal())
+		.xUnits(dc.units.ordinal)
+		._rangeBandPadding(1)		// ordinal axis on composite are misaligned. this is a temporary fix according to https://github.com/dc-js/dc.js/issues/662 
+//		.x(d3.scale.linear().domain([0, moqCatDim.top(1)[0].fields.moq_category_index + 1]))
+		.elasticY(true)
+		.legend(dc.legend().x(legend_x).y(legend_y).itemHeight(legend_itemHeight).gap(legend_gap))
+		.renderHorizontalGridLines(true)
+        .compose([ 
+			dc.lineChart(shipCompositeChart) 
+				//.colors('blue') 
+				.group(shipVal_group,"Shipment Value")
+				//.dashStyle([2,2])
+				,
+			dc.lineChart(shipCompositeChart) 
+				.colors('orange') 
+				.group(shipVol_group,"Volume")
+				.dashStyle([5,5])
+				.useRightYAxis(true)
+			
+			]) 
+		.brushOn(false)
+		;
+		
+	shipCompositeChart
+		.yAxisLabel("Shipment Value (US $)")
+		.yAxis().tickFormat(formatFunction_axis)
+		;
+	shipCompositeChart
+		.rightYAxisLabel("Volume (Units)")
+		.rightYAxis().tickFormat(formatFunction_axis)
+		;
+	// programmer note: Do not chain .yAxis because everything else afterwards will not work.
+	fixYAxisLabelOverlap(shipCompositeChart, 'left');
+	fixYAxisLabelOverlap(shipCompositeChart, 'right');
+	// y-axis label seems to be off. This is temporary solution till CSS is fixed.
+	
+	
+	
+	// bar chart
+	moqBarChart
+		.width(chartWidth)
+		.height(chartHeight)
+		.dimension(moqCatDim)
+		.group(moq_group,"MOQ")
+		//.stack(tsp_group,"Theretical Saving Potential - Value Growth")
+		.barPadding(0.5)
+		.elasticY(true)
+		;
+		
+	moqBarChart
+		.x(d3.scale.ordinal())
+		.xUnits(dc.units.ordinal)
+		;
+		
+	moqBarChart
+		.yAxisLabel("MOQ (US $)")
+		.yAxis().tickFormat(formatFunction_axis)
+		;
+	// programmer note: Do not chain .yAxis because everything else afterwards will not work.
+	fixYAxisLabelOverlap(moqBarChart, 'left');
+	// y-axis label seems to be off. This is temporary solution till CSS is fixed.
+
+	
+	
+
+	/*******************************************************
+	Step 6: Set up Side Panel Filters
+	********************************************************/
+
+	var showFilters = {{ filters|safe }};
+	setupFilter(ndx, showFilters);
+
+		
+	/*******************************************************
+	Step 7: Render the Charts
+	********************************************************/
+
+	dc.renderAll();
+
+</script>	
+
+{% endblock %}

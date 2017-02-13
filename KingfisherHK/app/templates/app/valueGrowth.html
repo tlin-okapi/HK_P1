@@ -1,1 +1,224 @@
-﻿<h1>Value Growth</h1>
+﻿<div class="row">
+	<div id="content" class="container col-md-10">
+		<h1>{{ title }}</h1>
+
+		<div>
+			Fixed Cost %: &nbsp;&nbsp; 
+			<span id="chart-fixed-cost" style="background-color:orange">
+		</div>
+		
+		<div id="chart-bar-shipment">
+			<h3 align="center">Shipment Value</h3>
+		</div>
+		
+		<div id="data-table" style='clear:both;'>
+				<table id="dc-data-table" class="table table-hover table-responsive table-striped">
+					<thead>
+					<tr > <!--class="header">-->
+						<th>Year</th>
+						<th>Shipment Value (US $)</th>
+					</tr>
+					</thead>
+				</table>
+		</div>	<!-- .data-table -->
+
+		<div id="tbd" class="col-md-12">
+			<br/>
+			<br/>
+			<h3>The following items are yet to be developed:</h3>
+			<li>MOT in chart</li>
+			<li>MOT build up in table</li>		
+		</div>	<!-- .tbd -->
+
+
+	</div>	<!-- .content -->
+		
+	<!-- Filter placeholder. Actual filter selected will be added via Javascript -->
+	<div id="selectFilter" class="container col-md-2"></div>
+	
+	
+</div>	<!-- .row -->
+
+
+{% block scripts %}
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'app/content/dc.min.css' %}" media="screen" /> 
+<script src="{% static 'app/scripts/crossfilter.min.js' %}"></script>
+<script src="{% static 'app/scripts/d3-dc.min.js' %}"></script>
+<script src="{% static 'app/scripts/dc.min.js' %}"></script>
+<script src="{% static 'app/scripts/site/common-utility.js' %}"></script> <!-- site specific filters to appear on right panel -->
+
+<script type="text/javascript">
+
+	/*******************************************************
+	Step 0: Set up Globals
+	********************************************************/
+	var debugFlag = 0;
+	var formatString_axis = ".2s";
+	var formatString_detail = ".4s";			
+	var formatFunction_axis = function(d) {return d3.format(formatString_axis)(d).replace("G","B");};
+	var formatFunction_detail = function(d) {return d3.format(formatString_detail)(d).replace("G","B");};
+	var contentWidth = d3.select("#content").style("width").replace("px", "");
+	var chartWidth = contentWidth * 0.9;
+	var chartHeight = 200;
+	if (debugFlag) {
+		console.log("contentWidth"); console.log(contentWidth); // Debug
+	}
+	
+	/*******************************************************
+	Step 1: Prepare Data 
+	********************************************************/
+
+	var db_data = {{ data|safe }};
+	var parseDate = d3.time.format("%Y-%m-%d").parse;
+	if (debugFlag) {
+		console.log("db_data"); console.log(db_data); // Debug
+	}
+	
+	/*******************************************************
+	Step 2: Create dc.js chart objects & link to div 
+	********************************************************/
+
+	var fixedCostChart = dc.numberDisplay("#chart-fixed-cost");
+	var shipmentChart  = dc.barChart("#chart-bar-shipment");
+	var datatable   = dc.dataTable("#dc-data-table");
+
+	
+	/*******************************************************
+	Setp 3: Set up cross filter 
+	********************************************************/
+
+	var ndx = crossfilter(db_data);
+
+	/*******************************************************
+	Setp 4: Create dimensions
+	A dimention is something to group or filter by.
+	Crossfilter can filter by exact value or by range.
+	********************************************************/
+
+	var yearDim = ndx.dimension(function(d) {return d.fields.year;});
+ 
+	if (debugFlag) {
+		console.log("yearDim.bottom(1)[0].fields.year"); console.log(yearDim.bottom(1)[0].fields.year); // Debug
+	}
+	var minYear = yearDim.bottom(1)[0].fields.year;
+	var maxYear = yearDim.top(1)[0].fields.year;
+	
+	// data count
+	var fxdCost_dim = ndx.groupAll().reduce(
+			  function (p, v) {
+				  ++p.number;
+				  p.ship +=  +v.fields.sum_shipment_value;
+				  p.total += +v.fields.sum_shipment_value * v.fields.fixed_cost_percentage;
+//				  p.avg = Math.round(p.total / p.ship);
+				  return p;
+				},
+			  function (p, v) {
+				  --p.number;
+				  p.ship -=  +v.fields.sum_shipment_value;
+				  p.total -= +v.fields.sum_shipment_value * v.fields.fixed_cost_percentage;
+//				  p.avg = (p.ship == 0) ? 0 : Math.round(p.total / p.ship);
+				  return p;
+				},
+			  function () {
+				  return {number: 0, ship: 0, total: 0, avg: 0}
+				}
+		  );
+	var averageFxdCost = function(d) {return d.ship ? d.total / d.ship : 0;}
+		  
+	// bar chart
+	var shipment_group=yearDim.group().reduceSum(function(d) {return d.fields.sum_shipment_value;});
+	var tsp_group=yearDim.group().reduceSum(function(d) {return d.fields.TSP_ValueGrowth;});
+
+	
+	// data table
+	var tbl_grouped_dim = yearDim.group().reduce(
+			// add
+			function (p, v) {
+				++p.number;
+				p.total += +v.fields.sum_shipment_value;
+				p.avg = Math.round(p.total / p.number);
+				return p;
+			},
+			// remove
+			function (p, v) {
+				--p.number;
+				p.total -= +v.fields.sum_shipment_value;
+				p.avg = (p.number == 0) ? 0 : Math.round(p.total / p.number);
+				return p;
+			},
+			// init
+			function () {
+				return {number: 0, total: 0, avg: 0}
+			}
+		  );
+	if (debugFlag) {
+		console.log("tbl_grouped_dim"); console.log(tbl_grouped_dim); // Debug
+		console.log("tbl_grouped_dim elements"); console.log(tbl_grouped_dim.top(tbl_grouped_dim.size())); // Debug
+	}
+ 
+
+	/*******************************************************
+	Step 5: Create Main Charts for Visualization
+	********************************************************/
+	
+	fixedCostChart
+		.group(fxdCost_dim)
+		.valueAccessor(averageFxdCost)
+		.formatNumber(d3.format("%"));
+		;
+	
+	shipmentChart
+		.width(chartWidth)
+		.height(chartHeight)
+		.dimension(yearDim)
+		.group(shipment_group,"Shipment Value")
+		//.stack(tsp_group,"Theretical Saving Potential - Value Growth")
+		.barPadding(0.5)
+		.elasticY(true)
+		;
+		
+	shipmentChart
+		.x(d3.scale.ordinal())
+		.xUnits(dc.units.ordinal)
+		;
+		
+	shipmentChart
+		.yAxisLabel("Shipment Value (US $)")
+		.yAxis().tickFormat(formatFunction_axis)
+		;
+	// programmer note: Do not chain .yAxis because everything else afterwards will not work.
+	fixYAxisLabelOverlap(shipmentChart, 'left');
+	// y-axis label seems to be off. This is temporary solution till CSS is fixed.
+
+
+	datatable
+		.dimension(tbl_grouped_dim)
+		.group(function (p) { return "" })
+		// dynamic columns creation using an array of closures
+		.columns([
+			function(d) { return d.key; },
+			function(d) { return formatFunction_detail(d.value.total > 1 ? d.value.total : 0); }
+		])
+		.sortBy(function (d) { return -d.key })
+		.order(d3.descending)
+		.showGroups(false)
+		;
+		
+
+	/*******************************************************
+	Step 6: Set up Side Panel Filters
+	********************************************************/
+	var showFilters = {{ filters|safe }};
+	setupFilter(ndx, showFilters);
+
+		
+	/*******************************************************
+	Step 7: Render the Charts
+	********************************************************/
+
+	dc.renderAll();
+
+</script>	
+
+{% endblock %}

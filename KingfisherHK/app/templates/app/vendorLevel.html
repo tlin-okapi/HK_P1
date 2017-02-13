@@ -1,75 +1,711 @@
-﻿<h1> This is the main dashboard - vendor level </h1>
-<br/>
-<table  border="1">
-   <tr>
-        <td id="left">
-            <h4>Business Performance Overview </h4>
-            
-            <div id="leftChart1"></div>
-            <div id="leftChart2"></div>
-            <div id="leftChart3"></div>
+﻿<div class="row">
+	<!--div id="content" class="container col-md-9">
+		<h1>{{ title }}</h1>
+	</div-->
+	<div id="left-content" class="container col-md-5">
+		
+		<h1>Business Performance Overview</h1>
 
-        </td>        
-    
-    
-        <td id="right">
-            <h4>Money on the Table Summary</h4>
-            
-        </td>
-    </tr>
-</table> 
+		<div class="row">
+			<span id="chart-category" class="col-md-4"></span>
+			<span class="col-md-8">
+				<table id="table-category" class="table table-hover table-responsive table-striped col-md-3">
+					<thead>
+					<tr > <!--class="header">-->
+						<th>Ship. Value <br/>(US $)</th>
+						<th>Share of Total Ship. Value (%)</th>
+						<th>Ship. Volume (Units)</th>
+					</tr>
+					</thead>
+				</table>
+			</span>
+		</div>
+		
+		<div id="chart-shipment">
+			<h3 align="center">Shipment Value & Volume</h3>
+		</div>
+		
+		<div id="chart-avg-cost">
+			<h3 align="center">Average Cost Price</h3>
+		</div>
 
-<!-- <div class="bar"></div> -->
+		<div id="data-table" style='clear:both;'>
+				<table id="chart-avg-value-vol" class="table table-hover table-responsive table-striped">
+					<thead>
+					<tr > <!--class="header">-->
+						<th>Year</th>
+						<th>Avg. Value per SKU (US $)</th>
+						<th>Avg. Value per PO (US $)</th>
+						<th>Avg. Volume per SKU (US $)</th>
+						<th>Avg. Volume per PO (US $)</th>
+					</tr>
+					</thead>
+				</table>
+		</div>	<!-- .data-table -->
+		
+		
+
+		
+	</div>	<!-- .left-content -->
+
+	<div id="right-content" class="container col-md-5">
+		
+		<h1>Money On the Table Summary</h1>
+		<div class="row">
+			<table>
+				<tbody>
+					<tr>
+						<td style="border-left: 1px solid #cdd0d4; border-top: 1px solid #cdd0d4; border-bottom: 1px solid #cdd0d4;">Shipment Value (US $)<sup>1</sup></td>
+						<td style="border-right: 1px solid #cdd0d4; border-top: 1px solid #cdd0d4; border-bottom: 1px solid #cdd0d4; background-color:orange" align="center">&nbsp;<strong><span id="chart-tot-value"></strong>&nbsp;</td>
+						<td style="border-left: 1px solid #cdd0d4; border-top: 1px solid #cdd0d4; border-bottom: 1px solid #cdd0d4;">Money On the Table (US $)<sup>1</sup></td>
+						<td style="border-right: 1px solid #cdd0d4; border-top: 1px solid #cdd0d4; border-bottom: 1px solid #cdd0d4; background-color:orange" align="center">&nbsp;<strong><span id="chart-tot-mot"></strong>&nbsp;</td>
+						<td style="border-left: 1px solid #cdd0d4; border-top: 1px solid #cdd0d4; border-bottom: 1px solid #cdd0d4;">MOQ% of Shipment Value</td>
+						<td style="border-right: 1px solid #cdd0d4; border-top: 1px solid #cdd0d4; border-bottom: 1px solid #cdd0d4; background-color:orange" align="center">&nbsp;<strong><span id="chart-tot-moq"></strong>&nbsp;</td>
+					</tr>
+					<tr>
+						<td style="border-left: 1px solid #cdd0d4; border-top: 1px solid #cdd0d4; border-bottom: 1px solid #cdd0d4;">Share of Total Ship. Value<sup>1</sup></td>
+						<td style="border-right: 1px solid #cdd0d4; border-top: 1px solid #cdd0d4; border-bottom: 1px solid #cdd0d4; background-color:orange" align="center">&nbsp;<strong><span id="chart-pct-value"></strong>&nbsp;</td>
+						<td style="border-left: 1px solid #cdd0d4; border-top: 1px solid #cdd0d4; border-bottom: 1px solid #cdd0d4;">Share of Total MOT<sup>1</sup></td>
+						<td style="border-right: 1px solid #cdd0d4; border-top: 1px solid #cdd0d4; border-bottom: 1px solid #cdd0d4; background-color:orange" align="center">&nbsp;<strong><span id="chart-pct-mot"></strong>&nbsp;</td>
+						<td/>
+						<td/>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div id="data-table" style='clear:both;'>
+				<table id="chart-avg-value-vol" class="table table-hover table-responsive table-striped">
+					<thead>
+					<tr > <!--class="header">-->
+						<th></th>
+						<th>MOT (US $)</th>
+						<th>Share of MOT (%)</th>
+						<th>Potential Negotiation Lever</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr id="mot-table-valuegrowth" style="visibility: display;">
+						<td>Value Growth</td>
+						<td id="mot-table-valuegrowth-value"></td>
+						<td id="mot-table-valuegrowth-pct"></td>
+						<td>Tooling, amortization, overhead</td>
+					</tr>
+					<tr id="mot-table-moq" style="visibility: display;">
+						<td>MOQ</td>
+						<td id="mot-table-moq-value"></td>
+						<td id="mot-table-moq-pct"></td>
+						<td>Encash the unused flexibility, lower FoB</td>
+					</tr>
+					<tr id="mot-table-cpr" style="visibility: display;">
+						<td>Cost Price Recovery</td>
+						<td id="mot-table-cpr-value"></td>
+						<td id="mot-table-cpr-pct"></td>
+						<td>Commodity driven; wage rate; productivity; T2 cost management</td>
+					</tr>
+					</tbody>
+					<tr id="mot-table-leadtime" style="visibility: hidden;">
+						<td>Lead Time</td>
+						<td id="mot-table-leadtime-value"></td>
+						<td id="mot-table-leadtime-pct"></td>
+						<td></td>
+					</tr>
+					<tr id="mot-table-margin" style="visibility: hidden;">
+						<td>Margin</td>
+						<td id="mot-table-margin-value"></td>
+						<td id="mot-table-margin-pct"></td>
+						<td></td>
+					</tr>
+					</tbody>
+				</table>
+		</div>	<!-- .data-table -->
+		
+		
+		<h1>Key Related Commodities & Impact</h1>
+		<table id="chart-avg-value-vol" class="table table-hover table-responsive table-striped">
+			<thead>
+			<tr > 
+				<th></th>
+				<th></th>
+				<th></th>
+				<th>Movement</th>
+				<th></th>
+				<th></th>
+				<th>Impact</th>
+			</tr>
+			<tr > 
+				<th></th>
+				<th>2015</th>
+				<th>2016</th>
+				<th>YoY%</th>
+				<th></th>
+				<th>2015</th>
+				<th>2016</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr > 
+				<td>Currency 1</td>
+				<td>7.74</td>
+				<td>7.76</td>
+				<td><font color="green">+0.3%</font></td>
+				<td>Product Line 1</td>
+				<td>1.6%</td>
+				<td><font color="red">-3.8%</font></td>
+			</tr>
+			<tr > 
+				<td>Commodity 2</td>
+				<td>168.8</td>
+				<td>200.2</td>
+				<td><font color="green">+18.6%</font></td>
+				<td>Product Line 2</td>
+				<td>2.3%</td>
+				<td><font color="red">-10.2%</font></td>
+			</tr>
+			<tr > 
+				<td>Commodity 3</td>
+				<td>45.5</td>
+				<td>32.5</td>
+				<td><font color="red">-28.6%</font></td>
+				<td>Product Line 3</td>
+				<td><font color="red">-0.2%</font></td>
+				<td>8.6%</td>
+			</tr>
+			</tbody>
+		</table>
+
+		
+	</div>	<!-- .right-content -->	
+	
+	
+	<!-- Filter placeholder. Actual filter selected will be added via Javascript -->
+	<div id="selectFilter" class="container col-md-2"></div>
+	
+
+</div>	<!-- .row -->
+
+<div id="notes" class="col-md-12">
+	<sup>1</sup>&nbsp;Values reflect the top categories with the highest shipment value.<br/>
+</div>
+
+<div id="tbd" class="col-md-12">
+	<br/>
+	<br/>
+	<h3>The following items are yet to be developed:</h3>
+	<li>How to calculate cost price ?</li>
+	<li>Narrow bar width</li>
+	<li>Volume axis label should be rotated in reverse direction</li>
+	<li>MOT components filter</li>
+</div>	<!-- .tbd -->
+
 
 {% block scripts %}
 {% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
-<script src="{% static 'app/scripts/d3.js' %}"></script>
-<script src="{% static 'app/scripts/dimple.v2.3.0.min.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'app/content/dc.min.css' %}" media="screen" /> 
+<script src="{% static 'app/scripts/crossfilter.min.js' %}"></script>
+<script src="{% static 'app/scripts/d3-dc.min.js' %}"></script>
+<script src="{% static 'app/scripts/dc.min.js' %}"></script>
+<script src="{% static 'app/scripts/site/common-utility.js' %}"></script> <!-- site specific filters to appear on right panel -->
 
-<script type="text/javascript">       
-    function draw(data){
-        var margin = 75,
-            width = 700 - margin,
-            height = 400 - margin;
-        
-        var svg = d3.select("#leftChart1")            
-            .append("svg")
-                .attr("width", width + margin)
-                .attr("height", height + margin)
-            .append('g')
-                .attr('class', 'chart');
-    
-        var myChart = new dimple.chart(svg, data);
-        myChart.setBounds(75, 30, 490, 330)
-        var x = myChart.addTimeAxis("x", "year"); 
-        myChart.addMeasureAxis("y", "attendance");
-        myChart.addMeasureAxis("x", "attendance");
-        var y = myChart.addTimeAxis("y", "year"); 
-        x.dateParseFormat = "%Y"
-        x.tickFormat = "%Y";
-        x.timeInterval = 4;        
-        myChart.addSeries(null, dimple.plot.bar);
-        myChart.addSeries(null, dimple.plot.line);
-        myChart.addSeries(null, dimple.plot.scatter);
-        myChart.draw();
-
-        var scatter = document.getElementsByClassName("dimple-series-2");
-        var bars = document.getElementsByClassName("dimple-series-0");
-        var line = document.getElementById("dimple-all");
-        
-        line.style.stroke = "black";
-        for (i = 0; i < scatter.length; i++) {
-            scatter[i].style.fill = "black";
-        }
-        for (j = 0; j < bars.length; j++) {
-            bars[j].style.fill = "red";
-        }
-    
-    };
-    
-    d3.tsv("{% static 'world_cup.tsv' %}", draw);
+<script type="text/javascript">
 
 
+	/*******************************************************
+	Step 0: Set up Globals
+	********************************************************/
+	var debugFlag = 0;
+	var formatString_axis = ".2s";
+	var formatString_detail = ".3s";			
+	var formatFunction_axis = function(d) {return d3.format(formatString_axis)(d).replace("G","B");};
+	var formatFunction_detail = function(d) {return d3.format(formatString_detail)(d).replace("G","B");};
+	var formatFunction_pct = d3.format("%");
+	var contentWidth = d3.select("#left-content").style("width").replace("px", "");
+	var chartWidth = contentWidth * 0.9;
+	var chartHeight = 120;
+	var legend_x = 60;
+	var legend_y = 10;
+	var legend_itemHeight = 13;
+	var legend_gap = 5;
+	var num_rowsCap = 3;
+	var chartTopMargin_row = 65;
+	var chartWidth_row = contentWidth * 0.4;
+	var chartHeight_row = num_rowsCap * 50 + chartTopMargin_row;
+
+	
+	/*******************************************************
+	Step 1: Prepare Data 
+	********************************************************/
+
+	var db_data = {{ data|safe }};
+	if (debugFlag) {
+		console.log("db_data"); console.log(db_data); // Debug
+	}
+	
+	/*******************************************************
+	Step 2: Create dc.js chart objects & link to div 
+	********************************************************/
+
+	var catChart = dc.rowChart("#chart-category");
+	var catTbl = dc.dataTable("#table-category");
+	var shipChart  = dc.compositeChart("#chart-shipment");
+	var avgCostPriceChart   = dc.compositeChart("#chart-avg-cost");
+	var avgValVolChart   = dc.dataTable("#chart-avg-value-vol");
+
+	
+	var totValueChart = dc.numberDisplay("#chart-tot-value");
+	var totMOTChart = dc.numberDisplay("#chart-tot-mot");
+	var totMOQChart = dc.numberDisplay("#chart-tot-moq");
+	var pctValueChart = dc.numberDisplay("#chart-pct-value");
+	var pctMOTChart = dc.numberDisplay("#chart-pct-mot");
+	
+	var motTbl_valuegrowth_value = dc.numberDisplay("#mot-table-valuegrowth-value");
+	var motTbl_moq_value = dc.numberDisplay("#mot-table-moq-value");
+	var motTbl_cpr_value = dc.numberDisplay("#mot-table-cpr-value");
+	var motTbl_valuegrowth_pct = dc.numberDisplay("#mot-table-valuegrowth-pct");
+	var motTbl_moq_pct = dc.numberDisplay("#mot-table-moq-pct");
+	var motTbl_cpr_pct = dc.numberDisplay("#mot-table-cpr-pct");
+	
+	
+	
+	/*******************************************************
+	Setp 3: Set up cross filter 
+	********************************************************/
+
+	var ndx = crossfilter(db_data);
+
+	/*******************************************************
+	Setp 4: Create dimensions
+	A dimention is something to group or filter by.
+	Crossfilter can filter by exact value or by range.
+	********************************************************/
+
+	var catDim = ndx.dimension(function(d) {return d.fields.category;});
+	var shipVal_catgroup=catDim.group().reduceSum(function(d) {return d.fields.sum_shipment_value;});
+	var shipVal_tot_group=ndx.groupAll().reduceSum(function(d) {return d.fields.sum_shipment_value;});
+	if (debugFlag) {
+		console.log("shipVal_tot_group"); console.log(shipVal_tot_group);
+		console.log("shipVal_tot_group.value()"); console.log(shipVal_tot_group.value());
+	}
+	
+	var catTblDim = catDim.group().reduce(
+			// add
+			function (p, v) {
+				p.total_val += v.fields.sum_shipment_value;
+				p.total_vol += v.fields.sum_order_quantity;
+				p.cat[v.fields.category] = (p.cat[v.fields.category] || 0) + v.fields.sum_shipment_value;
+				return p;
+			},
+			// remove
+			function (p, v) {
+				p.total_val -= v.fields.sum_shipment_value;
+				p.total_vol -= v.fields.sum_order_quantity;
+				p.cat[v.fields.category] -= v.fields.sum_shipment_value;
+				return p;
+			},
+			// init
+			function () {
+				return {total_val: 0, total_vol: 0, cat: {}};
+			}
+		);
+	
+	var yearDim = ndx.dimension(function(d) {return d.fields.year;});
+	var shipVal_group=yearDim.group().reduceSum(function(d) {return d.fields.sum_shipment_value;});
+	var shipVol_group=yearDim.group().reduceSum(function(d) {return d.fields.sum_order_quantity;});
+	var skuCount_group=yearDim.group().reduceSum(function(d) {return d.fields.num_sku;});
+	
+	var avgValPerSku_grouped_dim = yearDim.group().reduce(
+			// add
+			function (p, v) {
+				p.number_sku += +v.fields.num_sku;
+				p.number_po += +v.fields.num_po;
+				p.total_val += +v.fields.sum_shipment_value;
+				p.total_vol += +v.fields.sum_order_quantity;
+				p.avg_val_per_sku = (p.number_sku == 0) ? 0 : Math.round(p.total_val / p.number_sku);
+				p.avg_val_per_po = (p.number_po == 0) ? 0 : Math.round(p.total_val / p.number_po);
+				p.avg_vol_per_sku = (p.number_sku == 0) ? 0 : Math.round(p.total_vol / p.number_sku);
+				p.avg_vol_per_po = (p.number_po == 0) ? 0 : Math.round(p.total_vol / p.number_po);
+				return p;
+			},
+			// remove
+			function (p, v) {
+				p.number_sku -= +v.fields.num_sku;
+				p.number_po -= +v.fields.num_po;
+				p.total_val -= +v.fields.sum_shipment_value;
+				p.total_vol -= +v.fields.sum_order_quantity;
+				p.avg_val_per_sku = (p.number_sku == 0) ? 0 : Math.round(p.total_val / p.number_sku);
+				p.avg_val_per_po = (p.number_po == 0) ? 0 : Math.round(p.total_val / p.number_po);
+				p.avg_vol_per_sku = (p.number_sku == 0) ? 0 : Math.round(p.total_vol / p.number_sku);
+				p.avg_vol_per_po = (p.number_po == 0) ? 0 : Math.round(p.total_vol / p.number_po);
+				return p;
+			},
+			// init
+			function () {
+				return {number_sku: 0, number_po: 0, total_val: 0, total_vol: 0, avg_val_per_sku: 0, avg_val_per_po: 0, avg_vol_per_sku: 0, avg_vol_per_po: 0};
+			}
+		);
+
+
+	
+	// add
+	var reduceAdd_Fn = function(p, v) {
+			p.ship +=  +v.fields.sum_shipment_value;
+			p.tsp_valueGrowth += v.fields.TSP_ValueGrowth;
+			p.tsp_moq += v.fields.sum_vendor_moq;
+			p.tsp_costpricerecovery += 0;
+			p.mot = p.tsp_valueGrowth + p.tsp_moq + p.tsp_costpricerecovery;
+			return p;
+		};
+	// remove
+	var reduceRemove_Fn = function(p, v) {
+			p.ship -=  +v.fields.sum_shipment_value;
+			p.tsp_valueGrowth -= v.fields.TSP_ValueGrowth;
+			p.tsp_moq -= v.fields.sum_vendor_moq;
+			p.tsp_costpricerecovery -= 0;
+			p.mot = p.tsp_valueGrowth + p.tsp_moq + p.tsp_costpricerecovery;
+			return p;
+		};
+	// init
+	var reduceInit_Fn = function() {
+			return {ship: 0, tsp_valueGrowth: 0, tsp_moq: 0, tsp_costpricerecovery: 0};
+			};
+			
+	var mot_grouped_dim = ndx.groupAll().reduce(reduceAdd_Fn, reduceRemove_Fn, reduceInit_Fn);
+	var tot_ship = mot_grouped_dim.value().ship;
+	var tot_mot = mot_grouped_dim.value().mot;
+	var cat_grouped_dim = catDim.group().reduce(reduceAdd_Fn, reduceRemove_Fn, reduceInit_Fn).order(function(d) { return d.ship });
+
+	if (debugFlag) {
+		console.log("mot_grouped_dim"); console.log(mot_grouped_dim);
+		console.log("mot_grouped_dim.value()"); console.log(mot_grouped_dim.value());
+		console.log("mot_grouped_dim.value().mot"); console.log(mot_grouped_dim.value().mot);
+	}
+	
+	/*******************************************************
+	Step 5: Create Main Charts for Visualization
+	********************************************************/
+	
+	// Category row chart
+	catChart
+		.width(chartWidth_row) 
+		.height(chartHeight_row) 
+		.x(d3.scale.linear()) 
+		.elasticX(true) 
+		.dimension(catDim) 
+		.group(shipVal_catgroup) 
+		.ordering(function(d) { return -d.value })
+		.rowsCap(num_rowsCap)
+		.othersGrouper(false) 
+		.xAxis().ticks(0)
+//		.xAxis().tickFormat(function(v) {return "";})
+		; 
+	catChart.margins().top = catChart.margins().top + chartTopMargin_row;
+
+		
+	catTbl
+		.dimension(catTblDim)
+		.group(function (p) { return "" })
+		.columns([
+//			function(d) { return d.key; },
+			function(d) { return formatFunction_detail(d.value.total_val); },
+			function(d) { return formatFunction_pct(d.value.total_val / tot_ship); },
+			function(d) { return formatFunction_detail(d.value.total_vol); }
+		])
+		.sortBy(function (d) { return d.value.total_val })
+		.order(d3.descending)
+		.showGroups(false)
+		.endSlice(num_rowsCap)
+		;
+
+		
+	// Shipment Value & Volume
+	var shipChart_val = dc.barChart(shipChart) 
+				.group(shipVal_group,"Value")
+				.barPadding(0.5)
+				.centerBar(true)
+				;
+	var shipChart_vol = dc.lineChart(shipChart) 
+				.colors('orange') 
+				.group(shipVol_group,"Volume")
+				.useRightYAxis(true)
+				;
+	shipChart
+		.width(chartWidth)
+		.height(chartHeight)
+		.dimension(yearDim) 
+		.group(shipVal_group)		// set the group or else the ordinal scale won't work
+		.x(d3.scale.ordinal())
+		.xUnits(dc.units.ordinal)
+		._rangeBandPadding(1)		// ordinal axis on composite are misaligned. this is a temporary fix according to https://github.com/dc-js/dc.js/issues/662 
+		.elasticY(true)
+		.legend(dc.legend().x(legend_x).y(legend_y).itemHeight(legend_itemHeight).gap(legend_gap))
+		.renderHorizontalGridLines(true)
+        .compose([ 
+			shipChart_val
+				,
+			shipChart_vol
+			
+			]) 
+		.brushOn(false)
+		;
+		
+	if (debugFlag) {
+		console.log("shipChart_val"); console.log(shipChart_val);
+	}
+	shipChart
+		.yAxisLabel("Value (US $)")
+		.yAxis().tickFormat(formatFunction_axis)
+		.ticks(5)
+		;
+	shipChart
+		.rightYAxisLabel("Volume (Units)")
+		.rightYAxis().tickFormat(formatFunction_axis)
+		.ticks(5)
+		;
+	// programmer note: Do not chain .yAxis because everything else afterwards will not work.
+	fixYAxisLabelOverlap(shipChart, 'left');
+	fixYAxisLabelOverlap(shipChart, 'right');
+	// y-axis label seems to be off. This is temporary solution till CSS is fixed.
+	
+	
+	
+	// Cost Price
+/*
+	var avgCostPriceChart_cost = dc.barChart(avgCostPriceChart) 
+				.group(shipVal_group,"Shipment Value")
+				.barPadding(0.5)
+				.centerBar(true)
+				;
+*/
+	var avgCostPriceChart_sku = dc.lineChart(avgCostPriceChart) 
+				.colors('orange') 
+				.group(skuCount_group,"# of SKU")
+				.useRightYAxis(true)
+				;
+	avgCostPriceChart
+		.width(chartWidth)
+		.height(chartHeight)
+		.dimension(yearDim) 
+		.group(skuCount_group)		// set the group or else the ordinal scale won't work
+		.x(d3.scale.ordinal())
+		.xUnits(dc.units.ordinal)
+		._rangeBandPadding(1)		// ordinal axis on composite are misaligned. this is a temporary fix according to https://github.com/dc-js/dc.js/issues/662 
+		.elasticY(true)
+		.legend(dc.legend().x(legend_x).y(legend_y).itemHeight(legend_itemHeight).gap(legend_gap))
+		.renderHorizontalGridLines(true)
+        .compose([ 
+//			avgCostPriceChart_cost
+//				,
+			avgCostPriceChart_sku
+			
+			]) 
+		.brushOn(false)
+		;
+		
+//	if (debugFlag) {
+//		console.log("avgCostPriceChart_cost"); console.log(avgCostPriceChart_cost);
+//	}
+	avgCostPriceChart
+		.yAxisLabel("Avg Cost Price (US $)")
+		.yAxis().tickFormat(formatFunction_axis)
+		.ticks(5)
+		;
+	avgCostPriceChart
+		.rightYAxisLabel("# SKU (Units)")
+		.rightYAxis().tickFormat(formatFunction_axis)
+		.ticks(5)
+		;
+	// programmer note: Do not chain .yAxis because everything else afterwards will not work.
+	fixYAxisLabelOverlap(avgCostPriceChart, 'left');
+	fixYAxisLabelOverlap(avgCostPriceChart, 'right');
+	// y-axis label seems to be off. This is temporary solution till CSS is fixed.
+	
+
+	
+	// per SKU and per PO
+	avgValVolChart
+		.dimension(avgValPerSku_grouped_dim)
+		.group(function (p) { return "" })
+		.columns([
+			function(d) { return d.key; },
+			function(d) { return formatFunction_detail(d.value.avg_val_per_sku); },
+			function(d) { return formatFunction_detail(d.value.avg_val_per_po); },
+			function(d) { return formatFunction_detail(d.value.avg_vol_per_sku); },
+			function(d) { return formatFunction_detail(d.value.avg_vol_per_po); }
+		])
+		.sortBy(function (d) { return -d.key })
+		.order(d3.descending)
+		.showGroups(false)
+		;
+
+	
+	
+	totValueChart
+		.group(mot_grouped_dim)
+//		.valueAccessor(function(d) {return Math.abs(d.ship) < 1 ? 0 : d.ship;})
+		.valueAccessor(function(d) {
+				var tot = 0; 
+				for (var i=0; i<num_rowsCap; i++) {
+					tot += cat_grouped_dim.top(num_rowsCap)[i].value.ship;
+				}; 
+				return Math.abs(tot) < 1 ? 0 : tot; 
+			})
+		.formatNumber(formatFunction_detail);
+		;
+	
+	totMOTChart
+		.group(mot_grouped_dim)
+//		.valueAccessor(function(d) {return d.mot; })
+		.valueAccessor(function(d) {
+				var tot = 0; 
+				for (var i=0; i<num_rowsCap; i++) {
+					tot += cat_grouped_dim.top(num_rowsCap)[i].value.mot;
+				}; 
+				return Math.abs(tot) < 1 ? 0 : tot; 
+			})
+		.formatNumber(formatFunction_detail);
+		;
+	
+	totMOQChart
+		.group(mot_grouped_dim)
+//		.valueAccessor(function(d) {return (d.ship == 0) ? 0 : (d.tsp_moq / d.ship); })
+		.valueAccessor(function(d) {
+				var sum_denom = 0; 
+				var sum_num = 0; 
+				for (var i=0; i<num_rowsCap; i++) {
+					sum_denom += cat_grouped_dim.top(num_rowsCap)[i].value.ship; 
+					sum_num += cat_grouped_dim.top(num_rowsCap)[i].value.tsp_moq;
+				}; 
+				return (sum_denom == 0) ? 0 : (sum_num / sum_denom); 
+			})
+		.formatNumber(formatFunction_pct);
+		;
+	
+	pctValueChart
+		.group(mot_grouped_dim)
+//		.valueAccessor(function(d) {return Math.abs(d.ship) < 1 ? 0 : d.ship / tot_ship;})
+		.valueAccessor(function(d) {
+				var tot = 0; 
+				for (var i=0; i<num_rowsCap; i++) {
+					tot += cat_grouped_dim.top(num_rowsCap)[i].value.ship;
+					}; 
+				return (tot_ship == 0) ? 0 : (tot / tot_ship); 
+			})
+		.formatNumber(formatFunction_pct);
+		;
+	
+	pctMOTChart
+		.group(mot_grouped_dim)
+//		.valueAccessor(function(d) {return d.mot / tot_mot; })
+		.valueAccessor(function(d) {
+				var tot = 0; 
+				for (var i=0; i<num_rowsCap; i++) {
+					tot += cat_grouped_dim.top(num_rowsCap)[i].value.mot;
+				}; 
+				return (tot_mot == 0) ? 0 : (tot / tot_mot); 
+			})
+		.formatNumber(formatFunction_pct);
+		;
+	
+	
+	motTbl_valuegrowth_value
+		.group(mot_grouped_dim)
+//		.valueAccessor(function(d) {return Math.abs(d.tsp_valueGrowth) < 1 ? 0 : d.tsp_valueGrowth; })
+		.valueAccessor(function(d) {
+				var tot = 0; 
+				for (var i=0; i<num_rowsCap; i++) {
+					tot += cat_grouped_dim.top(num_rowsCap)[i].value.tsp_valueGrowth;
+				}; 
+				return Math.abs(tot) < 1 ? 0 : tot; 
+			})
+		.formatNumber(formatFunction_detail);
+		;
+
+	motTbl_moq_value
+		.group(mot_grouped_dim)
+//		.valueAccessor(function(d) {return Math.abs(d.tsp_moq) < 1 ? 0 : d.tsp_moq; })
+		.valueAccessor(function(d) {
+				var tot = 0; 
+				for (var i=0; i<num_rowsCap; i++) {
+					tot += cat_grouped_dim.top(num_rowsCap)[i].value.tsp_moq;
+				}; 
+				return Math.abs(tot) < 1 ? 0 : tot; 
+			})
+		.formatNumber(formatFunction_detail);
+		;
+
+	motTbl_cpr_value
+		.group(mot_grouped_dim)
+//		.valueAccessor(function(d) {return Math.abs(d.tsp_costpricerecovery) < 1 ? 0 : d.tsp_costpricerecovery; })
+		.valueAccessor(function(d) {
+				var tot = 0; 
+				for (var i=0; i<num_rowsCap; i++) {
+					tot += cat_grouped_dim.top(num_rowsCap)[i].value.tsp_costpricerecovery;
+				}; 
+				return Math.abs(tot) < 1 ? 0 : tot; 
+			})
+		.formatNumber(formatFunction_detail);
+		;
+		
+	motTbl_valuegrowth_pct
+		.group(mot_grouped_dim)
+//		.valueAccessor(function(d) {return Math.abs(d.tsp_valueGrowth) < 1 ? 0 : (d.tsp_valueGrowth / mot_grouped_dim.value().mot); })
+		.valueAccessor(function(d) {
+				var sum_denom = 0; 
+				var sum_num = 0; 
+				for (var i=0; i<num_rowsCap; i++) {
+					sum_denom += cat_grouped_dim.top(num_rowsCap)[i].value.mot; 
+					sum_num += cat_grouped_dim.top(num_rowsCap)[i].value.tsp_valueGrowth;
+					}; 
+				return (sum_denom == 0) ? 0 : (sum_num / sum_denom); 
+			})
+		.formatNumber(formatFunction_pct);
+		;
+
+	motTbl_moq_pct
+		.group(mot_grouped_dim)
+//		.valueAccessor(function(d) {return Math.abs(d.tsp_moq) < 1 ? 0 : (d.tsp_moq / mot_grouped_dim.value().mot); })
+		.valueAccessor(function(d) {
+				var sum_denom = 0; 
+				var sum_num = 0; 
+				for (var i=0; i<num_rowsCap; i++) {
+					sum_denom += cat_grouped_dim.top(num_rowsCap)[i].value.mot; 
+					sum_num += cat_grouped_dim.top(num_rowsCap)[i].value.tsp_moq;
+					}; 
+				return (sum_denom == 0) ? 0 : (sum_num / sum_denom); 
+			})
+		.formatNumber(formatFunction_pct);
+		;
+
+	motTbl_cpr_pct
+		.group(mot_grouped_dim)
+//		.valueAccessor(function(d) {return Math.abs(d.tsp_costpricerecovery) < 1 ? 0 : (d.tsp_costpricerecovery / mot_grouped_dim.value().mot); })
+		.valueAccessor(function(d) {
+				var sum_denom = 0; 
+				var sum_num = 0; 
+				for (var i=0; i<num_rowsCap; i++) {
+					sum_denom += cat_grouped_dim.top(num_rowsCap)[i].value.mot; 
+					sum_num += cat_grouped_dim.top(num_rowsCap)[i].value.tsp_costpricerecovery;
+				}; 
+				return (sum_denom == 0) ? 0 : (sum_num / sum_denom); 
+			})
+		.formatNumber(formatFunction_pct);
+		;
+		
+
+	/*******************************************************
+	Step 6: Set up Side Panel Filters
+	********************************************************/
+
+	var showFilters = {{ filters|safe }};
+	setupFilter(ndx, showFilters);
+
+		
+	/*******************************************************
+	Step 7: Render the Charts
+	********************************************************/
+
+	dc.renderAll();
+
+	
 </script>
 {% endblock %}

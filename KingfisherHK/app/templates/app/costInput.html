@@ -1,1 +1,134 @@
-﻿<h1>Cost Input</h1>
+﻿{% block content %}
+<h1>{{ title }}</h1>
+
+
+{% load staticfiles %}
+
+
+
+<div class="container">
+	<h4>Step 1: Choose the costing approach</h4>
+
+	<div class="row">
+		<form action="">
+			<span class="col-md-1" align="center">
+				<input type="radio" name="level" value="1">
+				<label style="font-size:12px">Level I</label>
+			</span>
+			<span class="col-md-1" align="center">
+				<input type="radio" name="level" value="2">
+				<label style="font-size:12px">Level II</label>
+			</span>
+			<span class="col-md-1" align="center">
+				<input type="radio" name="level" value="3">
+				<label style="font-size:12px">Level III</label>
+			</span>
+			<span class="col-md-1" align="center">
+				<input type="radio" name="level" value="4">
+				<label style="font-size:12px">Level IV</label>
+			</span>
+			<span class="col-md-2" align="center">
+				<input type="radio" name="level" value="5">
+				<label style="font-size:12px">Level V</label>
+			</span>
+			<span class="col-md-2" align="center">
+				<input type="radio" name="level" value="6">
+				<label style="font-size:12px">Level VI</label>
+			</span>
+		</form>
+	</div>
+	
+	<div class="row">
+		<span>&nbsp;<img src="{% static 'app/logo/cost_input_select_1_arrow.png' %}" alt="FoB based" style="height: 50px; width:66%">
+	</div>
+
+	<div class="row">
+
+		
+		<div class="thumbnail col-md-1">
+			<img src="{% static 'app/logo/cost_input_select_1_1.png' %}" alt="FoB based" style="height: 300px">
+			<div class="caption">
+				<p style="font-size:10px"><strong>FoB </strong>based - Cost trend analysis & cross-supplier consistency<br/>&nbsp;</p>
+			</div>
+		</div>	<!-- .thumbnail -->
+
+
+		<div class="thumbnail col-md-1">
+			<img src="{% static 'app/logo/cost_input_select_1_2.png' %}" alt="FoB based" style="height: 300px">
+			<div class="caption">
+				<p style="font-size:10px"><strong>FoB </strong>based - limited opportunity from additional complexity</p>
+			</div>
+		</div>	<!-- .thumbnail -->
+
+		<div class="thumbnail col-md-1">
+			<img src="{% static 'app/logo/cost_input_select_1_3.png' %}" alt="FoB based" style="height: 300px">
+			<div class="caption">
+				<p style="font-size:10px"><strong>FoB </strong>based continued<br/>&nbsp;<br/>&nbsp;<br/>&nbsp;<br/>&nbsp;</p>
+			</div>
+		</div>	<!-- .thumbnail -->
+
+		<div class="thumbnail col-md-1">
+			<img src="{% static 'app/logo/cost_input_select_1_4.png' %}" alt="FoB based" style="height: 300px">
+			<div class="caption">
+				<p style="font-size:10px"><strong>Parameter </strong>based - Insight into major cost drivers<br/>&nbsp;</p>
+			</div>
+		</div>	<!-- .thumbnail -->
+
+		<div class="thumbnail col-md-2">
+			<img src="{% static 'app/logo/cost_input_select_1_5.png' %}" alt="FoB based" style="height: 300px">
+			<div class="caption">
+				<p style="font-size:10px"><strong>Parameter </strong>based - Extend analysis to T2s / subcomponent<br/>&nbsp;<br/>&nbsp;<br/>&nbsp;<br/>&nbsp;</p>
+			</div>
+		</div>	<!-- .thumbnail -->		
+
+		<div class="thumbnail col-md-2">
+			<img src="{% static 'app/logo/cost_input_select_1_6.png' %}" alt="FoB based" style="height: 300px">
+			<div class="caption">
+				<p style="font-size:10px"><strong>Parameter </strong>based - Bottom-up 100% pre-cost<br/>&nbsp;<br/>&nbsp;<br/>&nbsp;<br/>&nbsp;</p>
+			</div>
+		</div>	<!-- .thumbnail -->		
+
+		<div class="container col-md-2"></div>
+		
+		<div id="selectFilter-1" class="container col-md-1">
+			<p><a id="step-1-clear" class="btn btn-primary" role="button" style="width: 60px">Clear</a> </p>
+			<p><a id="step-1-next" class="btn btn-primary" role="button" style="width: 60px">Next</a> </p>
+		
+		</div>
+	</div>
+	
+
+</div>
+<br/>
+<br/>
+<br/>
+<div class="container">
+	<h4>Step 2: Provide parameter input</h4>
+	<div class="row">
+	
+	</div>
+<div>
+
+
+<div id="tbd" class="col-md-12">
+	<br/>
+	<br/>
+	<h3>The following items are yet to be developed:</h3>
+	<li>Buttons in step 1</li>
+	<li>Step 2</li>		
+	<li>Step 3</li>		
+</div>	<!-- .tbd -->
+
+
+{% endblock %}
+
+
+{% block scripts %}
+<script type="text/javascript">
+	$(".option").click(function(){
+		$( this ).find( 'span' ).toggleClass( 'inactive' );
+		$( this ).toggleClass('active');
+		
+	});
+</script>
+{% endblock %}

@@ -1,19 +1,51 @@
 {% extends "app/layout.html" %}
 
 {% block content %}
+{% load staticfiles %}
 
 <h2>{{ title }}.</h2>
-<h3>{{ message }}</h3>
+<!-- <h3>{{ message }}</h3> -->
 
-<address>
-    745 Emerson Street<br />
-   Palo Alto, CA 94301-2411<br />
-    <abbr title="Phone">P: +1 650 475 4400</abbr>    
-</address>
+<div class="container">
+	<div class="row">
+		<!-- <div class="col-sm-6 col-md-4"> -->
+		
+			<div class="thumbnail col-sm-6 col-md-4">
+				<img src="{% static 'app/logo/hk.png' %}" alt="SDG Hong Kong">
+				<div class="caption">
+					<h3>SDG Hong Kong</h3>
+					<p>We are located right in the heart of the suppliers.</p>
+					One Island East, Level 23 <br />
+					18 Westlands Road<br />
+					Hong Kong<br />
+					<abbr title="Phone">P: +852 3750 7773</abbr>    
+					<address>
+						<strong>Contact:</strong> <a href="mailto:hk@sdg.com">hk@sdg.com<br /></a>
+						<strong>Website:</strong> <a href="http://hongkong.sdg.com/">hongkong.sdg.com</a>
+					</address>
+					<p><a href="http://hongkong.sdg.com/" class="btn btn-primary" role="button">Learn More</a> </p>
+				</div>
+			</div>	<!-- .thumbnail -->
 
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+
+			<div class="thumbnail col-sm-6 col-md-4">
+				<img src="{% static 'app/logo/strategic.png' %}" alt="SDG International">
+				<div class="caption">
+					<h3>SDG International</h3>
+					<p>We specialize in helping our clients solve their toughest problems.</p>
+					951 Mariners Island Boulevard, Suite 400 <br />
+					San Mateo, CA 94404<br />
+					USA<br />
+					<abbr title="Phone">P: +1 650 475 4400</abbr>    
+					<address>
+						<strong>Website:</strong> <a href="http://hongkong.sdg.com/">www.sdg.com</a>
+					</address>
+					<p><a href="http://www.sdg.com/" class="btn btn-primary" role="button">Learn More</a> </p>
+				</div>
+			</div>	<!-- .thumbnail -->
+		
+		<!-- </div> -->
+	</div>
+</div>
 
 {% endblock %}
