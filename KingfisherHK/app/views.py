@@ -61,9 +61,8 @@ def mainDashboardEntityLevel(request):
                 'vendor_code',
                 'year',
                 'sum_shipment_value',
-                'sum_vendor_moq',
                 'TSP_ValueGrowth',
-                'sum_vendor_moq'))    
+                'TSP_MOQ'))    
 				
     assert isinstance(request, HttpRequest)
     return render(
@@ -91,11 +90,10 @@ def mainDashboardVendorLevel(request):
                 'sum_shipment_value',
                 'sum_order_quantity',
                 'sum_shipment_value_sku_order',
-                'sum_vendor_moq',
 				'num_sku',
 				'num_po',
                 'TSP_ValueGrowth',
-                'sum_vendor_moq'))    
+                'TSP_MOQ'))    
 				
     assert isinstance(request, HttpRequest)
     return render(
@@ -120,8 +118,7 @@ def valueGrowth(request):
                 'vendor_code',
                 'year',
                 'sum_shipment_value',
-                'shipment_growth',
-                'growth_factor',
+                'sum_shipment_value_prior',
                 'TSP_ValueGrowth',
                 'fixed_cost_percentage'))    
 
@@ -150,7 +147,7 @@ def moq(request):
                 'year',
                 'sum_shipment_value',
                 'sum_order_quantity',
-                'sum_vendor_moq',
+                'TSP_MOQ',
                 'moq_category',
                 'moq_category_index'))    
 	

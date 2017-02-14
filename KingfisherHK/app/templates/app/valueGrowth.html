@@ -17,6 +17,9 @@
 					<tr > <!--class="header">-->
 						<th>Year</th>
 						<th>Shipment Value (US $)</th>
+						<th>Shipment Growth (%)</th>
+						<th>Growth Factor (%)</th>
+						<th>Money On the Table (US $)</th>
 					</tr>
 					</thead>
 				</table>
@@ -26,8 +29,7 @@
 			<br/>
 			<br/>
 			<h3>The following items are yet to be developed:</h3>
-			<li>MOT in chart</li>
-			<li>MOT build up in table</li>		
+			<li>Narrow bar width</li>
 		</div>	<!-- .tbd -->
 
 
@@ -58,9 +60,14 @@
 	var formatString_detail = ".4s";			
 	var formatFunction_axis = function(d) {return d3.format(formatString_axis)(d).replace("G","B");};
 	var formatFunction_detail = function(d) {return d3.format(formatString_detail)(d).replace("G","B");};
+	var formatFunction_pct = d3.format("%");
 	var contentWidth = d3.select("#content").style("width").replace("px", "");
 	var chartWidth = contentWidth * 0.9;
 	var chartHeight = 200;
+	var legend_x = 60;
+	var legend_y = 10;
+	var legend_itemHeight = 13;
+	var legend_gap = 5;
 	if (debugFlag) {
 		console.log("contentWidth"); console.log(contentWidth); // Debug
 	}
@@ -80,7 +87,7 @@
 	********************************************************/
 
 	var fixedCostChart = dc.numberDisplay("#chart-fixed-cost");
-	var shipmentChart  = dc.barChart("#chart-bar-shipment");
+	var shipmentChart  = dc.compositeChart("#chart-bar-shipment");
 	var datatable   = dc.dataTable("#dc-data-table");
 
 	
@@ -137,6 +144,18 @@
 			function (p, v) {
 				++p.number;
 				p.total += +v.fields.sum_shipment_value;
+				p.prior += +v.fields.sum_shipment_value_prior;
+				p.tsp += +v.fields.TSP_ValueGrowth;
+				p.growthFactor = (p.total == 0) ? 0 : p.tsp / p.total;
+				if (Math.abs(p.prior) < 1) {
+					p.shipGrowth = 0;
+				}
+				else if (Math.abs(p.total) < 1) {
+					p.shipGrowth = -1;
+				}
+				else {
+					p.shipGrowth = (p.total - p.prior) / p.prior;
+				}
 				p.avg = Math.round(p.total / p.number);
 				return p;
 			},
@@ -144,12 +163,24 @@
 			function (p, v) {
 				--p.number;
 				p.total -= +v.fields.sum_shipment_value;
+				p.prior -= +v.fields.sum_shipment_value_prior;
+				p.tsp -= +v.fields.TSP_ValueGrowth;
+				p.growthFactor = (p.total == 0) ? 0 : p.tsp / p.total;
+				if (Math.abs(p.prior) < 1) {
+					p.shipGrowth = 0;
+				}
+				else if (Math.abs(p.total) < 1) {
+					p.shipGrowth = -1;
+				}
+				else {
+					p.shipGrowth = (p.total - p.prior) / p.prior;
+				}
 				p.avg = (p.number == 0) ? 0 : Math.round(p.total / p.number);
 				return p;
 			},
 			// init
 			function () {
-				return {number: 0, total: 0, avg: 0}
+				return {number: 0, total: 0, prior: 0, tsp: 0, growthFactor: 0, shipGrowth: 0, avg: 0}
 			}
 		  );
 	if (debugFlag) {
@@ -165,30 +196,50 @@
 	fixedCostChart
 		.group(fxdCost_dim)
 		.valueAccessor(averageFxdCost)
-		.formatNumber(d3.format("%"));
+		.formatNumber(formatFunction_pct);
 		;
 	
+	var shipChart_val = dc.barChart(shipmentChart) 
+				.group(shipment_group,"Shipment Value")
+				.barPadding(0.5)
+				.centerBar(true)
+				;
+	var shipChart_tsp = dc.lineChart(shipmentChart) 
+				.colors('orange') 
+				.group(tsp_group,"MOT")
+				.useRightYAxis(true)
+				;
 	shipmentChart
 		.width(chartWidth)
 		.height(chartHeight)
 		.dimension(yearDim)
 		.group(shipment_group,"Shipment Value")
-		//.stack(tsp_group,"Theretical Saving Potential - Value Growth")
-		.barPadding(0.5)
-		.elasticY(true)
-		;
-		
-	shipmentChart
 		.x(d3.scale.ordinal())
 		.xUnits(dc.units.ordinal)
+		._rangeBandPadding(1)		// ordinal axis on composite are misaligned. this is a temporary fix according to https://github.com/dc-js/dc.js/issues/662 
+		.elasticY(true)
+		.legend(dc.legend().x(legend_x).y(legend_y).itemHeight(legend_itemHeight).gap(legend_gap))
+		.renderHorizontalGridLines(true)
+        .compose([ 
+			shipChart_val
+				,
+			shipChart_tsp
+			
+			]) 
+		.brushOn(false)
 		;
 		
 	shipmentChart
 		.yAxisLabel("Shipment Value (US $)")
 		.yAxis().tickFormat(formatFunction_axis)
 		;
+	shipmentChart
+		.rightYAxisLabel("MOT (US $)")
+		.rightYAxis().tickFormat(formatFunction_axis)
+		;
 	// programmer note: Do not chain .yAxis because everything else afterwards will not work.
 	fixYAxisLabelOverlap(shipmentChart, 'left');
+	fixYAxisLabelOverlap(shipmentChart, 'right');
 	// y-axis label seems to be off. This is temporary solution till CSS is fixed.
 
 
@@ -198,7 +249,10 @@
 		// dynamic columns creation using an array of closures
 		.columns([
 			function(d) { return d.key; },
-			function(d) { return formatFunction_detail(d.value.total > 1 ? d.value.total : 0); }
+			function(d) { return formatFunction_detail(Math.abs(d.value.total) >= 1 ? d.value.total : 0); },
+			function(d) { return formatFunction_pct(d.value.shipGrowth); },
+			function(d) { return formatFunction_pct(d.value.growthFactor); },
+			function(d) { return formatFunction_detail(Math.abs(d.value.tsp) >= 1 ? d.value.tsp : 0); }
 		])
 		.sortBy(function (d) { return -d.key })
 		.order(d3.descending)

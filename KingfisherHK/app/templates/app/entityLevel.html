@@ -262,7 +262,7 @@
 	var reduceAdd_Fn = function(p, v) {
 			p.ship +=  +v.fields.sum_shipment_value;
 			p.tsp_valueGrowth += v.fields.TSP_ValueGrowth;
-			p.tsp_moq += v.fields.sum_vendor_moq;
+			p.tsp_moq += v.fields.TSP_MOQ;
 			p.tsp_costpricerecovery += 0;
 			p.mot = p.tsp_valueGrowth + p.tsp_moq + p.tsp_costpricerecovery;
 			return p;
@@ -271,7 +271,7 @@
 	var reduceRemove_Fn = function(p, v) {
 			p.ship -=  +v.fields.sum_shipment_value;
 			p.tsp_valueGrowth -= v.fields.TSP_ValueGrowth;
-			p.tsp_moq -= v.fields.sum_vendor_moq;
+			p.tsp_moq -= v.fields.TSP_MOQ;
 			p.tsp_costpricerecovery -= 0;
 			p.mot = p.tsp_valueGrowth + p.tsp_moq + p.tsp_costpricerecovery;
 			return p;

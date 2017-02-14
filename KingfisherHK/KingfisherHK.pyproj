@@ -151,7 +151,6 @@
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="{0654d155-9b88-4282-8b7c-72a543773cef}\2.7" />
-    <InterpreterReference Include="{92b40689-2ad1-4fef-93e0-6f10c069af56}\2.7" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Django.targets" />
   <!-- Specify pre- and post-build commands in the BeforeBuild and 

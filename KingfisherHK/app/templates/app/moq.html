@@ -95,7 +95,7 @@
 	var moqCatDim = ndx.dimension(function(d) {return d.fields.moq_category;});
 	var shipVal_group = moqCatDim.group().reduceSum(function(d) {return d.fields.sum_shipment_value;});
 	var shipVol_group = moqCatDim.group().reduceSum(function(d) {return d.fields.sum_order_quantity;});
-	var moq_group = moqCatDim.group().reduceSum(function(d) {return d.fields.sum_vendor_moq;});
+	var moq_group = moqCatDim.group().reduceSum(function(d) {return d.fields.TSP_MOQ;});
  
 	if (debugFlag) {
 		console.log("moqCatDim"); console.log(moqCatDim); // Debug
@@ -224,6 +224,7 @@
 		//.stack(tsp_group,"Theretical Saving Potential - Value Growth")
 		.barPadding(0.5)
 		.elasticY(true)
+		.renderHorizontalGridLines(true)
 		;
 		
 	moqBarChart
