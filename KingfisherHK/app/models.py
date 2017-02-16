@@ -65,6 +65,7 @@ class FixedCost(models.Model):
 class MOQCategory(models.Model):
     moq_category_index = models.IntegerField(verbose_name='MOQ Category Index', default = 0)
     moq_category = models.CharField(verbose_name='MOQ Category', max_length=45)
+    moq_savings = models.FloatField(verbose_name='MOQ Efficiency Savings', default = 0)
 
 class ShipmentCalc(models.Model):
     buying_office = models.CharField(verbose_name='Buying Office', max_length=45)
@@ -87,6 +88,10 @@ class ShipmentCalc(models.Model):
     growth_factor = models.FloatField(verbose_name='Growth Factor (%)', default = 0)
     TSP_ValueGrowth = models.FloatField(verbose_name='Theoretical Saving Potential - Value Growth', default = 0)
     TSP_MOQ = models.FloatField(verbose_name='Theoretical Saving Potential - MOQ', default = 0)
+    TSP_CostPriceRecovery = models.FloatField(verbose_name='Theoretical Saving Potential - Cost Recovery', default = 0)
+    TSP_MOT = models.FloatField(verbose_name='Theoretical Saving Potential - Money On the Table', default = 0)
+    avg_cost_price = models.FloatField(verbose_name='Average cost price', default = 0)
+    avg_cost_price_prior = models.FloatField(verbose_name='Prior Average cost price', default = 0)
     fixed_cost_percentage = models.FloatField(verbose_name='Fixed Cost %', default = 0)
     sum_shipment_value_sku_order = models.FloatField(verbose_name='Shipment Value SKU Order', default = 0)
     sum_vendor_moq = models.IntegerField(verbose_name='Vendor MOQ', default = 0)

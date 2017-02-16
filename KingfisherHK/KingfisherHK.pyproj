@@ -60,7 +60,6 @@
   <ItemGroup>
     <Content Include="app\static\app\content\d3test.css" />
     <Content Include="app\static\app\content\dc.css" />
-    <Content Include="app\static\app\content\dc.min.css" />
     <Content Include="app\static\app\logo\cost_input_select_1_1.png" />
     <Content Include="app\static\app\logo\cost_input_select_1_2.png" />
     <Content Include="app\static\app\logo\cost_input_select_1_3.png" />
@@ -116,7 +115,6 @@
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />
-    <Content Include="app\static\app\content\bootstrap.min.css" />
     <Content Include="app\static\app\content\site.css" />
     <Content Include="app\static\app\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="app\static\app\fonts\glyphicons-halflings-regular.svg" />

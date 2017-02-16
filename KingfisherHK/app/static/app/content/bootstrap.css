@@ -312,7 +312,7 @@ html {
 
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 14px;  /* TL - changed from 14px */
   line-height: 1.428571429;
   color: #333333;
   background-color: #ffffff;
@@ -473,7 +473,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Impact, Charcoal, sans-serif; /* "Helvetica Neue", Helvetica, Arial, sans-serif; */
   font-weight: 500;
   line-height: 1.1;
 }
@@ -511,22 +511,22 @@ h6 {
 
 h1,
 .h1 {
-  font-size: 36px;
+  font-size: 24px; /* TL - changed from 36px */
 }
 
 h2,
 .h2 {
-  font-size: 30px;
+  font-size: 18px; /* TL - changed from 30px */
 }
 
 h3,
 .h3 {
-  font-size: 24px;
+  font-size: 14px; /* TL - changed from 24px */
 }
 
 h4,
 .h4 {
-  font-size: 18px;
+  font-size: 14px; /* TL - changed from 18px */
 }
 
 h5,
@@ -1452,13 +1452,18 @@ th {
   background-color: #ffffff;
 }
 
+.table-condensed {
+  margin-bottom: 0px; /* TL - changed from 20px */
+}
+
 .table-condensed thead > tr > th,
 .table-condensed tbody > tr > th,
 .table-condensed tfoot > tr > th,
 .table-condensed thead > tr > td,
 .table-condensed tbody > tr > td,
 .table-condensed tfoot > tr > td {
-  padding: 5px;
+  padding: 0px; /* TL - changed from 5px */
+  text-align: center;
 }
 
 .table-bordered {

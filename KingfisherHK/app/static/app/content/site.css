@@ -5,9 +5,9 @@
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    margin-left: 252px;
-    padding-left: 15px;
-    padding-right: 15px;
+    margin-left: 200px; /* TL - changed from 252px */
+    /* padding-left: 5px; TL - changed from 15px */
+    /* padding-right: 5px; TL - changed from 15px */
 }
 
 div.bar {
@@ -160,3 +160,5 @@ div.bar {
     display: block;
   }
 }
+
+

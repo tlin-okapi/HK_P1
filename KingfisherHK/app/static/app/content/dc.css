@@ -16,7 +16,7 @@ div.dc-chart {
   fill: #ccc; }
 
 .dc-chart .pie-slice {
-  fill: #fff;
+  fill: black; /* TL - changed from #fff */
   font-size: 12px;
   cursor: pointer; }
   .dc-chart .pie-slice.external {
@@ -98,7 +98,8 @@ div.dc-chart {
     fill-opacity: 0.6; }
 
 .dc-chart g.row text {
-  fill: #fff;
+  fill: black; /* TL - changed from #fff */
+  text-align: right;  /* TL - changed from #fff */
   font-size: 12px;
   cursor: pointer; }
 

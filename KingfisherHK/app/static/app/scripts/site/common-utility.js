@@ -145,3 +145,13 @@ function fixYAxisLabelOverlap(aChart, axisIndictor) {
 		aChart.margins().right = aChart.margins().right + defaultPadding;
 	
 }
+
+function snap_to_zero(aValue) {
+	// when crossfilter adds or subtract large numbers with small ones, the end result isn't precise.
+	return (Math.abs(aValue)<1e-4) ? 0 : aValue
+}
+
+function snap_to_zero_percent(aValue) {
+	// when crossfilter adds or subtract large numbers with small ones, the end result isn't precise.
+	return (Math.abs(aValue)<1e-6) ? 0 : aValue
+}
