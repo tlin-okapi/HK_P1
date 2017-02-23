@@ -125,16 +125,19 @@ class CostAppCommodity(models.Model):
     material = models.CharField(verbose_name='Material', max_length=45, primary_key=True)
     change = models.FloatField(verbose_name = 'Change', default = 0)
 
-
+class CostAppComp(models.Model):
+    product_type = models.CharField(verbose_name='Product Type', max_length=45)
+    final_cost = models.FloatField(verbose_name = 'Final Cost', default = 0)
+	
 class CostAppCost(models.Model):
     product_code = models.CharField(verbose_name='Product Code', max_length=45, primary_key=True)
     product_name = models.CharField(verbose_name='Product Name', max_length=255)
     product_type = models.CharField(verbose_name='Product Type', max_length=45)
     standard_minutes = models.IntegerField(verbose_name='Standard Minutes', default = 0)
     raw_material = models.ForeignKey(CostAppCommodity, on_delete=models.CASCADE)
+    material_cost = models.FloatField(verbose_name = 'Raw Material Cost', default = 0)	
     wastage_allowance = models.FloatField(verbose_name = 'Wastage Allowance', default = 0)
     overhead = models.FloatField(verbose_name = 'Overhead ($)', default = 0)
-
 
 class CostAppWage(models.Model):
     country_of_origin = models.CharField(verbose_name = 'Country of Origin', max_length=45, primary_key=True)

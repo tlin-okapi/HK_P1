@@ -53,29 +53,29 @@
 					<!-- TL 2017-02-21 &emsp; is used extensivel. When used as a prefix, it is to work around the menu text alignment.
 						When used as a suffix, it is to relax the mouse click sensitivity on top of the label. I tried hooking the page load onto li onclick event, but the pages that require crossfilter take too long to load. -->
 					<ul class="sub-menu collapse" id="dashboard-submenu">                    
-						<li><a href="#" onclick="return mainDashboardEntityLevel();">&emsp;&emsp;&ensp;Entity Level&emsp;&emsp;</a></li>
-						<li><a href="#" onclick="return mainDashboardVendorLevel();">&emsp;&emsp;&ensp;Vendor Level&emsp;&emsp;</a></li>                         
+						<li><a href="#" onclick="return mainDashboardEntityLevel();">&emsp;&emsp;&ensp;Entity Level&emsp;&emsp;&emsp;&emsp;</a></li>
+						<li><a href="#" onclick="return mainDashboardVendorLevel();">&emsp;&emsp;&ensp;Vendor Level&emsp;&emsp;&emsp;&ensp;</a></li>                         
 					</ul>                
 
 					<li data-toggle="collapse" data-target="#mot_analysis_submenu" class="collapsed">
 					  <a href="#"><i class="fa fa-globe fa-lg"></i> MOT Analysis </a><span class="arrow"></span> 
 					</li>  
 					<ul class="sub-menu collapse" id="mot_analysis_submenu">
-					  <li><a href="#" onclick="return goto_nav('valueGrowth');">&emsp;&emsp;&ensp;Value Growth&emsp;&emsp;</a></li>
-					  <li><a href="#" onclick="return goto_nav('moq');">&emsp;&emsp;&ensp;MOQ&emsp;&emsp;&emsp;&emsp;</a></li>
-					  <li><a href="#" onclick="return goto_nav('leadTime');">&emsp;&emsp;&ensp;Lead Time&emsp;&emsp;</a></li>
-					  <li><a href="#" onclick="return goto_nav('margin');">&emsp;&emsp;&ensp;Margin&emsp;&emsp;&emsp;&emsp;</a></li>                  
+					  <li><a href="#" onclick="return goto_nav('valueGrowth');">&emsp;&emsp;&ensp;Value Growth&emsp;&emsp;&emsp;</a></li>
+					  <li><a href="#" onclick="return goto_nav('moq');">&emsp;&emsp;&ensp;MOQ&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</a></li>
+					  <li><a href="#" onclick="return goto_nav('leadTime');">&emsp;&emsp;&ensp;Lead Time&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;</a></li>
+					  <li><a href="#" onclick="return goto_nav('margin');">&emsp;&emsp;&ensp;Margin&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;</a></li>                  
 					</ul>
 					 <li data-toggle="collapse" data-target="#assumption_submenu" class="collapsed">
 					  <a href="#"><i class="fa fa-user fa-lg"></i> Assumptions</a><span class="arrow"></span>                   
 					 </li>
 					 <ul class="sub-menu collapse" id="assumption_submenu">
-					  <li><a href="#" onclick="return goto_nav('commodityData');">&emsp;&emsp;&ensp;Commodity Data</a></li>
-					  <li><a href="#" onclick="return goto_nav('laborRate');">&emsp;&emsp;&ensp;Labor Rate&emsp;&emsp;</a></li>
-					  <li><a href="#" onclick="return goto_nav('currency');">&emsp;&emsp;&ensp;Currency&emsp;&emsp;</a></li>
-					  <li><a href="#" onclick="return goto_nav('inflation');">&emsp;&emsp;&ensp;Inflation&emsp;&emsp;&emsp;</a></li>
-					  <li><a href="#" onclick="return goto_nav('dutyScenario');">&emsp;&emsp;&ensp;Duty Scenario&emsp;&emsp;</a></li>
-					  <li><a href="#" onclick="return goto_nav('standardProcess');">&emsp;&emsp;&ensp;Standard Process</a></li>                     
+					  <li><a href="#" onclick="return goto_nav('commodityData');">&emsp;&emsp;&ensp;Commodity Data&emsp;</a></li>
+					  <li><a href="#" onclick="return goto_nav('laborRate');">&emsp;&emsp;&ensp;Labor Rate&emsp;&emsp;&emsp;&emsp;</a></li>
+					  <li><a href="#" onclick="return goto_nav('currency');">&emsp;&emsp;&ensp;Currency&emsp;&emsp;&emsp;&emsp;&emsp;</a></li>
+					  <li><a href="#" onclick="return goto_nav('inflation');">&emsp;&emsp;&ensp;Inflation&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;</a></li>
+					  <li><a href="#" onclick="return goto_nav('dutyScenario');">&emsp;&emsp;&ensp;Duty Scenario&emsp;&emsp;&ensp;</a></li>
+					  <li><a href="#" onclick="return goto_nav('standardProcess');">&emsp;&emsp;&ensp;Standard Process&emsp;</a></li>                     
 					 </ul>  										
 				</ul> 
 
@@ -83,9 +83,9 @@
                   <a href="#"><i class="fa fa-car fa-lg"></i> Costing Tool </a><span class="arrow"></span> 
                 </li>
                 <ul class="sub-menu collapse" id="costing_submenu">
-                  <li><a href="#" onclick="return goto_nav('methodology');">&emsp;Methodology&emsp;&emsp;</a></li>
-                  <li><a href="#" onclick="return goto_nav('costInput');">&emsp;Cost Input&emsp;&emsp;&emsp;</a></li>
-                  <li><a href="#" onclick="return goto_nav('costPriceEvolution');">&emsp;Cost Price Evolution</a></li>
+                  <li><a href="#" onclick="return goto_nav('methodology');">&emsp;Methodology&emsp;&emsp;&emsp;&emsp;&emsp;</a></li>
+                  <li><a href="#" onclick="return goto_nav('costInput');">&emsp;Cost Input&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</a></li>
+                  <li><a href="#" onclick="return goto_nav('costPriceEvolution');">&emsp;Cost Price Evolution&emsp;</a></li>
                 </ul>          
             </ul>
          </div>
@@ -95,59 +95,92 @@
 
     <div class="container body-content">
         <div id="main_body">
+            <div id='spinner' class='spinner'></div> <!-- for ajax loading -->
             {% block content %}{% endblock %}
         </div>
                 
         <hr/>
         <footer>
-			<!-- for ajax loading -->
-			<div id="wait" style="display:none;width:69px;height:89px;border:0px solid black;position:absolute;top:50%;left:50%;padding:2px;">
-			<img src="{% static 'app/logo/ajax-loader.gif' %}" width="64" height="64" /><br>Loading..</div>
             <p>&copy; {{ year }} by Strategic Decisions Group International LLC. All rights reserved.</p>
         </footer>
     </div>
 
-    <script src="{% static 'app/scripts/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
     <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
     <script src="{% static 'app/scripts/respond.js' %}"></script>
+    <script src="{% static 'app/scripts/spin.js' %}"></script>    
     
     <script>
-	
-		$(document).ready(function(){
-			$(document).ajaxStart(function(){
-				$("#wait").css("display", "block");
-			});
-			$(document).ajaxComplete(function(){
-				$("#wait").css("display", "none");
-			});
-		});
-	
+		var spinner = null;
+		
+		function spinner_action(spinFlag) {
+			var opts = {
+			  lines: 11, // The number of lines to draw
+			  length: 15, // The length of each line
+			  width: 10, // The line thickness
+			  radius: 30, // The radius of the inner circle
+			  corners: 1, // Corner roundness (0..1)
+			  rotate: 0, // The rotation offset
+			  direction: 1, // 1: clockwise, -1: counterclockwise
+			  color: '#000', // #rgb or #rrggbb
+			  speed: 0.6, // Rounds per second
+			  trail: 60, // Afterglow percentage
+			  shadow: false, // Whether to render a shadow
+			  hwaccel: false, // Whether to use hardware acceleration
+			  className: 'spinner', // The CSS class to assign to the spinner
+			  zIndex: 2e9, // The z-index (defaults to 2000000000)
+			  top: 'auto', // Top position relative to parent in px
+			  left: 'auto' // Left position relative to parent in px
+			};
+			
+			var spinner_div = 0;
+			spinner_div = $('#spinner').get(0);
+			
+			if (spinFlag) {
+				if(spinner == null) {
+				  spinner = new Spinner(opts);
+				}
+				spinner.spin(spinner_div);
+			}
+			else {
+				if(spinner != null) {
+				  spinner.stop(spinner_div);
+				}
+			}
+			
+		}
 
 
         function mainDashboardEntityLevel(){
+				spinner_action(true);
                 $.ajax({
                     url: '{% url 'mainDashboardEntityLevel' %}',
                     success: function (data) {
                         $('#main_body').html(data);
+						spinner_action(false);
                     }
                 });
                }
 
         function mainDashboardVendorLevel(){
+				spinner_action(true);
                 $.ajax({
                     url: '{% url 'mainDashboardVendorLevel' %}',
                     success: function (data) {
                         $('#main_body').html(data);
+ 						spinner_action(false);
                    }
                 });
                }
 			   
 		function goto_nav(aLoc){
+			spinner_action(true);
 			var urlLoc = '{% url 'standardProcess' %}'.replace('standardProcess', aLoc);
             $.ajax({
                     url: urlLoc,
                     success: function (data) {
                         $('#main_body').html(data);
+						spinner_action(false);
                     }
                 });
         }

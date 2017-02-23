@@ -5,6 +5,7 @@
 	<div id="left-content" class="container col-md-5" style="border-right: 1px solid #dddddd;">
 		
 		<h1>Business Performance Overview</h1>
+        <br/>
 
 		<div class="row">
 			<span id="chart-category-dummy" class="col-md-2"></span>
@@ -56,10 +57,10 @@
                 <thead>
                 <tr>
                     <th style=" font-size:12px">Year</th>
-                    <th style="width:150px; font-size:12px">Avg. Value per SKU (US $)</th>
-                    <th  style="width:150px; font-size:12px" " >Avg. Value per PO (US $)</th>
-                    <th  style="width:150px; font-size:12px">Avg. Volume per SKU (US $)</th>
-                    <th  style="width:150px; font-size:12px">Avg. Volume per PO (US $)</th>
+                    <th style="width:150px; font-size:12px">Avg. Value per <br/>SKU (US $)</th>
+                    <th  style="width:150px; font-size:12px">Avg. Value per <br>PO (US $)</th>
+                    <th  style="width:150px; font-size:12px">Avg. Volume per <br>SKU (US $)</th>
+                    <th  style="width:150px; font-size:12px">Avg. Volume per <br>PO (US $)</th>
                 </tr>
                 </thead>
             </table>
@@ -71,10 +72,12 @@
 		
 	</div>	<!-- .left-content -->
 
-	<div id="right-content" class="container col-md-5" style="border-right: 1px solid #dddddd;">
+	<div id="right-content" class="container col-md-5" style="border-left: 1px solid #dddddd; border-right: 1px solid #dddddd;">
 		
 		<h1>Money On the Table Summary</h1>
-        
+        <br/>
+        <br/>
+        <br/>
         <table>
             <tbody>
                 <tr>
@@ -90,51 +93,52 @@
                     <td style="border-right: 1px solid #cdd0d4; border-top: 1px solid #cdd0d4; border-bottom: 1px solid #cdd0d4; background-color:orange; text-align: center">&nbsp;<strong><span id="chart-pct-value"></strong>&nbsp;</td>
                     <td style="border-left: 1px solid #cdd0d4; border-top: 1px solid #cdd0d4; border-bottom: 1px solid #cdd0d4; text-align: center">Share of Total <br/>MOT<sup>1</sup></td>
                     <td style="border-right: 1px solid #cdd0d4; border-top: 1px solid #cdd0d4; border-bottom: 1px solid #cdd0d4; background-color:orange; text-align: center">&nbsp;<strong><span id="chart-pct-mot"></strong>&nbsp;</td>
-                    <td/>
-                    <td/>
                 </tr>
             </tbody>
         </table>
         
         <br/>
 		<br/>
+        <br/>
+		<br/>
+        <br/>
  
 		<div id="data-table" style='clear:both;'>
 				<table id="chart-avg-value-vol" class="table table-condensed table-hover table-responsive table-striped">
 					<thead>
 					<tr> <!--class="header">-->
 						<th></th>
-						<th>MOT (US $)</th>
-						<th>Share of MOT (%)</th>
-						<th>Potential Negotiation Lever</th>
+						<th>MOT <br/>(US $)</th>
+						<th>Share of <br/>MOT (%)</th>
+						<th>Potential <br/>Negotiation Lever</th>
 					</tr>
 					</thead>
 					<tbody>
-					<tr id="mot-table-valuegrowth" style="visibility: display;">
+					<tr id="mot-table-valuegrowth" style="display: table-row;">
 						<td>Value Growth</td>
 						<td id="mot-table-valuegrowth-value"></td>
 						<td id="mot-table-valuegrowth-pct"></td>
 						<td>Tooling, amortization, <br/>overhead</td>
 					</tr>
-					<tr id="mot-table-moq" style="visibility: display;">
+					<tr id="mot-table-moq" style="display: table-row;">
 						<td>MOQ</td>
 						<td id="mot-table-moq-value"></td>
 						<td id="mot-table-moq-pct"></td>
 						<td>Encash the unused <br/>flexibility, lower FoB</td>
 					</tr>
-					<tr id="mot-table-cpr" style="visibility: display;">
+					<tr id="mot-table-cpr" style="display: none;">
 						<td>Cost Price Recovery</td>
 						<td id="mot-table-cpr-value"></td>
 						<td id="mot-table-cpr-pct"></td>
 						<td>Commodity driven; wage rate; productivity; T2 cost management</td>
 					</tr>
-					<tr id="mot-table-leadtime" style="visibility: display;">
+					<tr id="mot-table-leadtime" style="display: none;">
 						<td>Lead Time</td>
 						<td id="mot-table-leadtime-value"></td>
 						<td id="mot-table-leadtime-pct"></td>
 						<td>&nbsp;<br/>&nbsp;</td>
 					</tr>
-					<tr id="mot-table-margin" style="visibility: display;">
+					<tr id="mot-table-margin" style="display: none;">
 						<td>Margin</td>
 						<td id="mot-table-margin-value"></td>
 						<td id="mot-table-margin-pct"></td>
@@ -142,12 +146,33 @@
 					</tr>
 					</tbody>
 				</table>
+				<table id="chart-avg-value-vol-blank" class="table table-condensed table-responsive" border="0">
+					<tr id="mot-table-valuegrowth-blank" style="display: none;" bgcolor="#FFFFFF">
+						<td/><td/><td/>
+						<td>&nbsp;<br/>&nbsp;</td>
+					</tr>
+					<tr id="mot-table-moq-blank" style="display: none;" bgcolor="#FFFFFF">
+						<td/><td/><td/>
+						<td>&nbsp;<br/>&nbsp;</td>
+					</tr>
+					<tr id="mot-table-cpr-blank" style="display: table-row;" bgcolor="#FFFFFF">
+						<td/><td/><td/>
+						<td>&nbsp;<br/>&nbsp;</td>
+					</tr>
+					<tr id="mot-table-leadtime-blank" style="display: table-row;" bgcolor="#FFFFFF">
+						<td/><td/><td/>
+						<td>&nbsp;<br/>&nbsp;</td>
+					</tr>
+					<tr id="mot-table-margin-blank" style="display: table-row;" bgcolor="#FFFFFF">
+						<td/><td/><td/>
+						<td>&nbsp;<br/>&nbsp;</td>
+					</tr>
+					</tbody>
+				</table>
 		</div>	<!-- .data-table -->
 		
 		<br/>
-		<br/>
-         
-		<h1><br/>Key Related Commodities & Impact</h1>
+		<h1>Key Related Commodities & Impact</h1>
 		<table id="chart-avg-value-vol" class="table table-condensed table-hover table-responsive table-striped">
 			<thead>
                 <tr> 
@@ -201,6 +226,9 @@
 		</table>
 
         <br/>
+		<br/>
+		<br/>
+		<br/>
 		
 	</div>	<!-- .right-content -->	
 	
@@ -219,14 +247,6 @@
 	Total Shipment Value (US $) = <span id="tot-ship" /><br/>
 </div>
 
-<div id="tbd" class="col-md-12">
-	<br/>
-	<br/>
-	<h3>The following items are yet to be developed:</h3>
-	<li>Narrow bar width</li>
-	<li>Volume axis label should be rotated in reverse direction</li>
-	<li>MOT components filter</li>
-</div>	<!-- .tbd -->
 
 
 {% block scripts %}
@@ -299,7 +319,7 @@
 	var num_rowsCap = 3;
 	var chartTopMargin_row = -10;
 	var chartWidth_row = contentWidth * 0.33;
-	var chartHeight = 120;
+	var chartHeight = 130;
 	var fontSizeInUse = parseInt(d3.select("#left-content").style("font-size"));
      var perRowHeight = 18 / 12 * fontSizeInUse; // calculate from default setting for font-size=12px. To change font-size, modify body font-size in bootstrap.css.
 	var chartHeight_row = num_rowsCap * perRowHeight;
@@ -529,6 +549,12 @@
 				.group(shipVol_group,"Volume")
 				.useRightYAxis(true)
 				;
+	var barWidthAdjustFunction = function(chart) {
+			chart.svg().selectAll('rect.bar').attr('width', 20).attr('transform', 'translate(-10,0)');
+			var transformStr = chart.select("text.y-axis-label.yr-label").attr('transform');
+			chart.select("text.y-axis-label.yr-label").attr('transform', transformStr.replace('rotate(90)', 'rotate(-90)'));
+			};	 // workaround to adjust the bar width
+			
 	shipChart
 		.width(chartWidth)
 		.height(chartHeight)
@@ -547,6 +573,7 @@
 			
 			]) 
 		.brushOn(false)
+		.on('renderlet', barWidthAdjustFunction)
 		;
 		
 	if (debugFlag) {
@@ -566,7 +593,6 @@
 	fixYAxisLabelOverlap(shipChart, 'left');
 	fixYAxisLabelOverlap(shipChart, 'right');
 	// y-axis label seems to be off. This is temporary solution till CSS is fixed.
-	
 	
 	
 	// Cost Price
@@ -601,13 +627,14 @@
 			
 			]) 
 		.brushOn(false)
+		.on('renderlet', barWidthAdjustFunction) // workaround to adjust the bar width
 		;
 		
 //	if (debugFlag) {
 //		console.log("avgCostPriceChart_cost"); console.log(avgCostPriceChart_cost);
 //	}
 	avgCostPriceChart
-		.yAxisLabel("Avg Cost Price (US $ / Unit)")
+		.yAxisLabel("Cost Price($/Unit)")
 		.yAxis().tickFormat(function(d) {return d3.format(".2d")(d).replace("G","B");})
 		.ticks(5)
 		;

@@ -11,6 +11,7 @@ from .models import *
 from django.http import HttpResponse
 import json
 from django.http import JsonResponse
+from django.forms.models import model_to_dict
 
 def home(request):
     """Renders the home page."""
@@ -107,7 +108,7 @@ def mainDashboardVendorLevel(request):
             'title':'Main Dashboard - Vendor Level',
             'year':datetime.now().year,
             'data': data_json,
-			'filters': ['Analysis Period', 'Sourcing Office', 'Category', 'Vendor Code'],
+			'filters': ['Analysis Period', 'Sourcing Office', 'Category', 'Vendor Code', 'MOT Component'],
         }
     )
 
@@ -203,6 +204,19 @@ def methodology(request):
         }
     )
 
+def costInputNav(request):
+	"""Renders the Margin page."""
+	assert isinstance(request, HttpRequest)
+	website=request.GET['level']
+	return render(
+		request,
+		website,
+		{
+			'title':'Cost Input',
+			'year':datetime.now().year,
+		}
+	)
+
 def costInput(request):
     """Renders the Margin page."""
     assert isinstance(request, HttpRequest)
@@ -213,8 +227,61 @@ def costInput(request):
             'title':'Cost Input',
             'year':datetime.now().year,
         }
-    )
+    )	
+	
 
+def costOutput(request):
+	product_code_input = request.GET['product_code']
+	vendor_name_input = request.GET['vendor_name']
+	country_origin_input = request.GET['country_origin']
+	material_input = request.GET['material']
+	country_destination_input = request.GET['country_destination']
+	size = request.GET['size']
+	currency = request.GET['currency']
+	minute_linked = 0.005
+	bom_linked=0.05
+	
+	Table_cost = CostAppCost.objects.get(product_code=product_code_input)
+	cost_dict = model_to_dict(Table_cost,fields=['product_name', 'product_type','standard_minutes','wastage_allowance','overhead','material_cost','raw_material'])
+	#Table_commodity = CostAppCommodity.objects.get(material=str(cost_dict['raw_material']))
+	#commodity_dict = model_to_dict(Table_commodity, fields=['change'])
+	
+	Table_wage = CostAppWage.objects.get(country_of_origin=country_origin_input)
+	wage_dict=model_to_dict(Table_wage,fields=['wage_rate'])
+	Table_vendor = CostAppVendor.objects.get(vendor_name=vendor_name_input)
+	vendor_dict=model_to_dict(Table_vendor,fields=['efficiency_adjustment'])
+	Table_duty = CostAppDuty.objects.get(country_of_origin=country_origin_input,country_of_destination=country_destination_input,material=material_input)
+	duty_dict=model_to_dict(Table_duty,fields=['transportation','duty_rate'])
+	
+	labor_payout=float(cost_dict['standard_minutes'])*float(wage_dict['wage_rate'])*float(vendor_dict['efficiency_adjustment'])
+	#bom_cost=float(cost_dict['material_cost'])*float(cost_dict['wastage_allowance'])*float(commodity_dict['change'])
+	bom_cost=float(cost_dict['material_cost'])+float(cost_dict['wastage_allowance'])	
+	margin = float(minute_linked)*float(cost_dict['standard_minutes'])+float(bom_linked)*float(bom_cost)
+	duty = float(duty_dict['duty_rate'])*(float(labor_payout)+float(bom_cost)+float(cost_dict['overhead'])+float(margin))
+	fob=float(labor_payout)+float(bom_cost)+float(cost_dict['overhead'])+float(margin)
+	final_cost=float(labor_payout)+float(bom_cost)+float(cost_dict['overhead'])+float(margin)+float(duty_dict['transportation'])+float(duty)
+	
+	return HttpResponse(json.dumps({'cost_approach':'Level III',
+									'minute_linked':minute_linked,
+									'bom_linked':bom_linked,
+									'product_name':cost_dict['product_name'],
+									'product_type':cost_dict['product_type'],
+									'standard_minutes':cost_dict['standard_minutes'],
+									'wastage_allowance': cost_dict['wastage_allowance'],
+									'overhead':cost_dict['overhead'],
+									'material_cost':cost_dict['material_cost'],
+									#'commodity_change':commodity_dict['change'],
+									'wage_rate':wage_dict['wage_rate'],
+									'efficiency_adjustment':vendor_dict['efficiency_adjustment'],
+									'transportation':duty_dict['transportation'],
+									'duty_rate':duty_dict['duty_rate'],
+									'labor_payout':labor_payout,
+									'bom_cost':bom_cost,
+									'margin':margin,
+									'duty':duty,
+									'fob':fob,
+									'final_cost':final_cost}),content_type='application/json')
+	
 def costPriceEvolution(request):
     """Renders the Margin page."""
     assert isinstance(request, HttpRequest)

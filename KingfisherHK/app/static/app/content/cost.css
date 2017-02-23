@@ -1,0 +1,145 @@
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+.row{
+	margin-top: 5px;
+}
+.cost_input{
+
+}
+
+input {display: block; padding: 0; margin: 0; border: 0; width: 100%; height:100%;background-color: #F0FFFF;}
+
+td {
+	width:200px;
+	height:30px;
+}
+
+td.output{
+	width:300px;
+	background-color: #FFFACD;
+}
+
+td.row_divider{
+	width:100px;
+}
+
+tr.table_divider{
+	height:15px;
+}
+
+
+table.cost_input_table {
+	/* border: none;
+   border-collapse: collapse; */
+}
+
+.circle {
+  float:left;
+  margin-top:20px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 20px;
+  color: #fff;
+  line-height: 30px;
+  text-align: center;
+  background: #000
+}
+
+.cal_category{
+	width: 100px;
+	height: 30px;
+	float:left;
+	margin-left:20px;
+	margin-top:20px;
+	text-align: left;
+	line-height: 30px;
+}
+
+strong.title_box{
+    float: left;
+    width: 100%;
+    height: 43px;
+    margin: 1px;
+    border: 2px solid #008B8B; 
+	background-color:#008B8B;
+	text-align:center;
+	color:white;
+	display: inline-block;
+}
+
+span.result_box{
+	float: left;
+    width: 100%;
+    height: 23px;
+    margin: 1px;
+    border: 2px solid #FFFACD; 
+	background-color:#FFFACD;
+	text-align:center;
+	display: inline-block;
+}
+
+img.signs{
+	display: inline-block;
+	width:15px;
+	Height:100%;
+	float:left;
+	margin: 10px;
+	vertical-align: middle;
+	margin-top:15px;
+}
+
+img.excel{
+	display: inline-block;
+	width:20px;
+	Height:100%;
+	float:center;
+	margin-top: 8px;
+	margin-left:15px;
+}
+
+.btn_toolbar{
+	float:right;
+}
+
+.divider{
+	height: 42px;
+}
+
+#final_cost{
+	text-align:center;
+	width:100px;
+	height:30px;
+	line-height:30px;
+	background-color: #FFE4C4;
+	display: inline-block;
+	font-size: 16px;
+}
+#title_box_FinalCost{
+	text-align:center;
+	display: inline-block;
+	font-size: 18px;
+}
+
+.btn_cost {
+    background-color: #008B8B;
+    border: none;
+    color: white;
+    padding: 2px 4px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 2px 2px;
+    cursor: pointer;
+	border-radius: 8px;
+	width:100px;
+	height:30px;
+}
+
+.btn_cost:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}

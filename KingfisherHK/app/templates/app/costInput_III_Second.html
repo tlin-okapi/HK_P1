@@ -1,0 +1,315 @@
+﻿{% block content %}
+
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" media="screen" /> 
+<link rel="stylesheet" type="text/css" href="{% static 'app/content/cost.css' %}" media="screen" /> 
+<script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
+<script src="{% static 'app/scripts/bootstrap.min.js' %}"></script>
+<script src="{% static 'app/scripts/d3.min.js' %}"></script>
+<h1>{{ title }}</h1>
+<h4>Step 2 - Input the parameters</h4>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-10">
+			<table class="cost_input_table">
+				<tbody>
+					<tr>
+					   <td><strong>Product Code:&nbsp;</strong></td>
+					   <td><input type="text" id = "product_code" name="product_code"></td>
+					   <td class="row_divider"></td>
+					   <td><strong>Cost Approach:&nbsp;</strong></td>
+					   <td class='output'><span id='cost_approach'></span></td>
+					</tr>
+					<tr class="table_divider"></tr>
+					<tr>
+					   <td><strong>Product Name:&nbsp;</strong></td>
+					   <td class='output'><span id='product_name'></span></td>
+					   <td class="row_divider"></td>
+					   <td><strong>Vendor Name:&nbsp;</strong></td>
+					   <td><input type="text" id = "vendor_name" name="vendor_name"></td>
+					</tr>
+					<tr class="table_divider"></tr>
+					<tr>
+					   <td><strong>Product Type:&nbsp;</strong></td>
+					   <td class='output'><span id='product_type'></span></td>
+					   <td class="row_divider"></td>
+					   <td><strong>Country of Origin:&nbsp;</strong></td>
+					   <td><input type="text" id = "country_origin" name="country_origin"></td>
+					</tr>
+					<tr class="table_divider"></tr>
+					<tr>
+					   <td><strong>Material:&nbsp;</strong></td>
+					   <td><input type="text" id = "material" name="material"></td>
+					   <td class="row_divider"></td>
+					   <td><strong>Country of Destination:&nbsp;</strong></td>
+					   <td><input type="text" id = "country_destination" name="country_destination"></td>
+					</tr>
+					<tr class="table_divider"></tr>
+					<tr>
+					   <td><strong>Size:&nbsp;</strong></td>
+					   <td><input type="text" id = "size" name="size"></td>
+					   <td class="row_divider"></td>
+					   <td><strong>Currency:&nbsp;</strong></td>
+					   <td><input type="text" id = "currency" name="currency"></td>
+					</tr>										
+				</tbody>
+			</table>		
+		</div>
+		<div class="col-md-2">
+			<div class="col-sm-8">
+				<button type="button" id="btnUpload" class="btn_cost">Upload</button>
+				<button type="button" id="btnCal" class="btn_cost">Calculate</button>
+				<button type="button" id="btnClear" class="btn_cost">Clear</button>
+				<div class ="divider row"></div>
+				<strong id = "title_box_FinalCost">Final Cost<br><span id="final_cost"></span></strong>				
+			</div>
+			<div class = 'test'>
+				<img src="{% static 'app/logo/excel.png' %}" alt="excel" class= "excel" >
+			</div>
+
+		</div>
+	</div>
+	
+	<div class ="divider row"></div>
+	
+	<div class="row">
+		<div class="col-md-2">
+			<span class="circle">A</span>
+			<h4 class = "cal_category">Labor</h4>
+		</div>
+		<div class="col-md-10">
+			<div class = "col-md-2">
+				<strong class = "title_box">Standard Minutes<br></strong>
+				<span class = "result_box standard_minutes"></span>
+			</div>
+			<div class = 'frame'>
+				<img src="{% static 'app/logo/times.png' %}" alt="times" class= 'signs'>
+			</div>
+			<div class = "col-md-2">
+				<strong  class = "title_box">Wage Rate (per hour)<br></strong>
+				<span  class = "result_box" id ='wage_rate'></span>
+			</div>
+			<div class = 'frame'>
+				<img src="{% static 'app/logo/times.png' %}" alt="times" class= 'signs'>
+			</div>
+			<div class = "col-md-2">
+				<strong class = "title_box">Efficiency Adjustment<br></strong>
+				<span class = "result_box" id = 'efficiency_adjustment'></span>
+			</div>
+			<div class = 'frame'>
+				<img src="{% static 'app/logo/equal.png' %}" alt="equal" class= 'signs'>
+			</div>
+			<div class = "col-md-2">
+				<strong class = "title_box">Laybor Payout<br></strong>
+				<span class = "result_box labor_payout"></span>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-2">
+			<span class="circle">B</span>
+			<h4 class = "cal_category">Material</h4>
+		</div>
+		<div class="col-md-10">
+			<div class = "col-md-2">
+				<strong class = "title_box">Raw Material<br></strong>
+				<span class = "result_box" id ='material_cost'></span>
+			</div>
+			<div class = 'frame'>
+				<img src="{% static 'app/logo/plus.png' %}" alt="plus" class= 'signs'>
+			</div>
+			<div class = "col-md-2">
+				<strong class = "title_box">Wastage Allowance<br></strong>
+				<span class = "result_box" id = 'wastage_allowance'></span>
+			</div>
+			<div class = 'frame'>
+				<img src="{% static 'app/logo/equal.png' %}" alt="equal" class= 'signs'>
+			</div>
+			<div class = "col-md-2">
+				<strong class = "title_box">BOM Cost<br></strong>
+				<span class = "result_box bom_cost"></span>
+			</div>
+			<div class = 'frame'>
+			</div>
+			<div class = "col-md-2">
+			</div>			
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-2">
+			<span class="circle">C</span>
+			<h4 class = "cal_category">Fixed Cost</h4>
+		</div>
+		<div class="col-md-10">
+			<div class = "col-md-2">
+				<strong class = "title_box">Overhead<br></strong>
+				<span class = "result_box" id ='overhead'></span>
+			</div>			
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-2">
+			<span class="circle">D</span>
+			<h4 class = "cal_category">Margin</h4>
+		</div>
+		<div class="col-md-10">
+			<div class = "col-md-2">
+				<strong class = "title_box">Minute Linked Maring(per min)</strong>
+				<span class = "result_box" id ='minute_linked'></span>
+			</div>
+			<div class = 'frame'>
+				<img src="{% static 'app/logo/times.png' %}" alt="times" class= 'signs'>
+			</div>
+			<div class = "col-md-2">
+				<strong class = "title_box">Standard Minutes<br></strong>
+				<span class = "result_box standard_minutes"></span>
+			</div>
+			<div class = 'frame'>
+				<img src="{% static 'app/logo/plus.png' %}" alt="plus" class= 'signs'>
+			</div>
+			<div class = "col-md-2">
+				<strong class = "title_box">BoM Linked Margin<br></strong>
+				<span class = "result_box" id ='bom_linked'></span>
+			</div>
+			<div class = 'frame'>
+				<img src="{% static 'app/logo/times.png' %}" alt="times" class= 'signs'>
+			</div>
+			<div class = "col-md-2">
+				<strong class = "title_box">BOM Cost<br></strong>
+				<span class = "result_box bom_cost"></span>
+			</div>
+			<div class = 'frame'>
+				<img src="{% static 'app/logo/equal.png' %}" alt="equal" class= 'special_signs signs'>
+			</div>
+			<div class = "col-md-2">
+				<strong class = "title_box">Margin<br></strong>
+				<span class = "result_box", id='margin'></span>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-2">
+			<span class="circle">E</span>
+			<h4 class = "cal_category">Uplift to Landed</h4>
+		</div>
+		<div class="col-md-10">
+			<div class = "col-md-2">
+				<strong class = "title_box">Transportation<br></strong>
+				<span class = "result_box" id ='transportation'></span>
+			</div>			
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-2">
+			<span class="circle">F</span>
+			<h4 class = "cal_category">Duty</h4>
+		</div>
+		<div class="col-md-10">
+			<div class = "col-md-2">
+				<strong class = "title_box">Duty %<br></strong>
+				<span class = "result_box" id='duty_rate'></span>
+			</div>
+			<div class = 'frame'>
+				<img src="{% static 'app/logo/times.png' %}" alt="times" class= 'signs'>
+			</div>
+			<div class = "col-md-2">
+				<strong class = "title_box">FoB<br></strong>
+				<span class = "result_box" id='fob'></span>
+			</div>
+			<div class = 'frame'>
+				<img src="{% static 'app/logo/equal.png' %}" alt="equal" class= 'signs'>
+			</div>
+			<div class = "col-md-2">
+				<strong class = "title_box">Duty<br></strong>
+				<span class = "result_box" id='duty'></span>
+			</div>	
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="btn_toolbar">
+			<button type="button" id="btnPrevious" class="btn_cost">Previous</button>
+			<button type="button" id="btnNext" class="btn_cost">Next</button>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    $(document).ready(function(){
+		$("#btnCal").click(function(){
+			var product_code = $("#product_code").val();
+			var vendor_name = $("#vendor_name").val();
+			var country_origin = $("#country_origin").val();
+			var material = $("#material").val();
+			var country_destination = $("#country_destination").val();
+			var size = $("#size").val();
+			var currency = $("#currency").val();			
+			$.get("/costOutput/",{'product_code':product_code,'vendor_name':vendor_name,'country_origin':country_origin,'material':material,'country_destination':country_destination,'size':size,'currency':currency}, 	function(ret){
+					$('#cost_approach').html(ret['cost_approach']);
+					$('#product_name').html(ret['product_name']);
+					$('#product_type').html(ret['product_type']);
+					$('.standard_minutes').html(d3.format('.1f')(ret['standard_minutes']));
+					$('#wage_rate').html(d3.format('.2f')(ret['wage_rate']));
+					$('#efficiency_adjustment').html(d3.format('%')(ret['efficiency_adjustment']));
+					$('.labor_payout').html(d3.format('.1f')(ret['labor_payout']));
+					$('#material_cost').html(d3.format('.1f')(ret['material_cost']));
+					$('#wastage_allowance').html(d3.format('.1f')(ret['wastage_allowance']));					
+					$('.bom_cost').html(d3.format('.1f')(ret['bom_cost']));
+					$('#final_cost').html(d3.format('.1f')(ret['final_cost']));
+					$('#overhead').html(ret['overhead']);
+					$('#minute_linked').html(ret['minute_linked']);
+					$('#bom_linked').html(d3.format('%')(ret['bom_linked']));
+					$('#margin').html(d3.format('.1f')(ret['margin']));
+					$('#transportation').html(d3.format('.1f')(ret['transportation']));					
+					$('#duty_rate').html(d3.format('.0%')(ret['duty_rate']));
+					$('#fob').html(d3.format('.1f')(ret['fob']));
+					$('#duty').html(d3.format('.1f')(ret['duty']));	
+			})
+		})
+		
+		$("#btnClear").click(function(){
+					$('#cost_approach').html('');
+					$('#product_name').html('');
+					$('#product_type').html('');
+					$('.standard_minutes').html('');
+					$('#wage_rate').html('');
+					$('#efficiency_adjustment').html('');
+					$('.labor_payout').html('');
+					$('#material_cost').html('');
+					$('#wastage_allowance').html('');					
+					$('.bom_cost').html('');
+					$('#final_cost').html('');
+					$('#overhead').html('');
+					$('#minute_linked').html('');
+					$('#bom_linked').html('');
+					$('#margin').html('');
+					$('#transportation').html('');					
+					$('#duty_rate').html('');
+					$('#fob').html('');
+					$('#duty').html('');
+					$("#product_code").val() = "a";
+				})
+				
+		$("#btnPrevious").click(function(){costInput();})
+			
+        function costInput(){
+            $.ajax({
+                    url: '{% url 'costInput' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }		
+		
+	});	
+</script>
+{% endblock %}

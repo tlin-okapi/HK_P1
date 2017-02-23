@@ -1,5 +1,5 @@
 ﻿<div class="row" style="border-bottom: 1px solid #dddddd;">
-	<div id="content" class="container col-md-10" style="border-right: 1px solid #dddddd;">
+	<div id="content" class="container col-md-10">
 		<h1>{{ title }}</h1>
 
 		<div>
@@ -25,18 +25,12 @@
 				</table>
 		</div>	<!-- .data-table -->
 
-		<div id="tbd" class="col-md-12">
-			<br/>
-			<br/>
-			<h3>The following items are yet to be developed:</h3>
-			<li>Narrow bar width</li>
-		</div>	<!-- .tbd -->
 
 
 	</div>	<!-- .content -->
 		
 	<!-- Filter placeholder. Actual filter selected will be added via Javascript -->
-	<div id="selectFilter" class="container col-md-2"></div>
+	<div id="selectFilter" class="container col-md-2" style="border-left: 1px solid #dddddd;"></div>
     <br/>
 	
 </div>	<!-- .row -->
@@ -209,6 +203,12 @@
 				.group(tsp_group,"MOT")
 				.useRightYAxis(true)
 				;
+	var barWidthAdjustFunction = function(chart) {
+			chart.svg().selectAll('rect.bar').attr('width', 20).attr('transform', 'translate(-10,0)');
+			var transformStr = chart.select("text.y-axis-label.yr-label").attr('transform');
+			chart.select("text.y-axis-label.yr-label").attr('transform', transformStr.replace('rotate(90)', 'rotate(-90)'));
+			};	 // workaround to adjust the bar width
+			
 	shipmentChart
 		.width(chartWidth)
 		.height(chartHeight)
@@ -227,17 +227,18 @@
 			
 			]) 
 		.brushOn(false)
+		.on('renderlet', barWidthAdjustFunction)
 		;
 		
 	shipmentChart
 		.yAxisLabel("Shipment Value (US $)")
 		.yAxis().tickFormat(formatFunction_axis)
 		;
+	// programmer note: Do not chain .yAxis because everything else afterwards will not work.
 	shipmentChart
 		.rightYAxisLabel("MOT (US $)")
 		.rightYAxis().tickFormat(formatFunction_axis)
 		;
-	// programmer note: Do not chain .yAxis because everything else afterwards will not work.
 	fixYAxisLabelOverlap(shipmentChart, 'left');
 	fixYAxisLabelOverlap(shipmentChart, 'right');
 	// y-axis label seems to be off. This is temporary solution till CSS is fixed.

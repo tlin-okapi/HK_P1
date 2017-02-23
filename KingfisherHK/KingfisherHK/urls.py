@@ -26,8 +26,12 @@ urlpatterns = [
     url(r'^leadTime', app.views.leadTime, name='leadTime'),
     url(r'^margin', app.views.margin, name='margin'),
     url(r'^methodology', app.views.methodology, name='methodology'),
-    url(r'^costInput', app.views.costInput, name='costInput'),
-    url(r'^costPriceEvolution', app.views.costPriceEvolution, name='costPriceEvolution'),
+	
+    url(r'^costInput$', app.views.costInput, name='costInput'),
+	url(r'^costInputNav$', app.views.costInputNav, name='costInputNav'),
+	url(r'^costOutput', app.views.costOutput, name='costOutput'),
+    
+	url(r'^costPriceEvolution', app.views.costPriceEvolution, name='costPriceEvolution'),
     url(r'^commodityData', app.views.commodityData, name='commodityData'),
 	url(r'^laborRate', app.views.laborRate, name='laborRate'),
 	url(r'^labor_chart$', app.views.laborRateChart, name='laborRateChart'),

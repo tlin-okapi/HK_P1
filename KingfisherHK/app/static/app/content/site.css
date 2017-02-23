@@ -82,7 +82,7 @@ div.bar {
 }
 .nav-side-menu ul .sub-menu li.active a,
 .nav-side-menu li .sub-menu li.active a {
-  color: #d19b3d;
+  color: #ab740d; /* TL modified from #d19b3d so that text is still visible when hovering. */
 }
 .nav-side-menu ul .sub-menu li,
 .nav-side-menu li .sub-menu li {
@@ -160,5 +160,9 @@ div.bar {
     display: block;
   }
 }
+
+
+ 
+
 
 
