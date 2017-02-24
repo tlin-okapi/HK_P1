@@ -53,29 +53,29 @@
 					<!-- TL 2017-02-21 &emsp; is used extensivel. When used as a prefix, it is to work around the menu text alignment.
 						When used as a suffix, it is to relax the mouse click sensitivity on top of the label. I tried hooking the page load onto li onclick event, but the pages that require crossfilter take too long to load. -->
 					<ul class="sub-menu collapse" id="dashboard-submenu">                    
-						<li><a href="#" onclick="return mainDashboardEntityLevel();">&emsp;&emsp;&ensp;Entity Level&emsp;&emsp;</a></li>
-						<li><a href="#" onclick="return mainDashboardVendorLevel();">&emsp;&emsp;&ensp;Vendor Level&emsp;&emsp;</a></li>                         
+						<li><a href="#" onclick="return mainDashboardEntityLevel();">&emsp;&emsp;&ensp;Entity Level&emsp;</a></li>
+						<li><a href="#" onclick="return mainDashboardVendorLevel();">&emsp;&emsp;&ensp;Vendor Level&emsp;</a></li>                         
 					</ul>                
 
 					<li data-toggle="collapse" data-target="#mot_analysis_submenu" class="collapsed">
 					  <a href="#"><i class="fa fa-globe fa-lg"></i> MOT Analysis </a><span class="arrow"></span> 
 					</li>  
 					<ul class="sub-menu collapse" id="mot_analysis_submenu">
-					  <li><a href="#" onclick="return goto_nav('valueGrowth');">&emsp;&emsp;&ensp;Value Growth&emsp;&emsp;</a></li>
-					  <li><a href="#" onclick="return goto_nav('moq');">&emsp;&emsp;&ensp;MOQ&emsp;&emsp;&emsp;&emsp;</a></li>
-					  <li><a href="#" onclick="return goto_nav('leadTime');">&emsp;&emsp;&ensp;Lead Time&emsp;&emsp;</a></li>
-					  <li><a href="#" onclick="return goto_nav('margin');">&emsp;&emsp;&ensp;Margin&emsp;&emsp;&emsp;&emsp;</a></li>                  
+					  <li><a href="#" onclick="return valueGrowth();">&emsp;&emsp;&ensp;Value Growth&emsp;</a></li>
+					  <li><a href="#" onclick="return moq();">&emsp;&emsp;&ensp;MOQ&emsp;</a></li>
+					  <li><a href="#" onclick="return leadTime();">&emsp;&emsp;&ensp;Lead Time&emsp;</a></li>
+					  <li><a href="#" onclick="return margin();">&emsp;&emsp;&ensp;Margin&emsp;</a></li>                  
 					</ul>
 					 <li data-toggle="collapse" data-target="#assumption_submenu" class="collapsed">
 					  <a href="#"><i class="fa fa-user fa-lg"></i> Assumptions</a><span class="arrow"></span>                   
 					 </li>
 					 <ul class="sub-menu collapse" id="assumption_submenu">
-					  <li><a href="#" onclick="return goto_nav('commodityData');">&emsp;&emsp;&ensp;Commodity Data</a></li>
-					  <li><a href="#" onclick="return goto_nav('laborRate');">&emsp;&emsp;&ensp;Labor Rate&emsp;&emsp;</a></li>
-					  <li><a href="#" onclick="return goto_nav('currency');">&emsp;&emsp;&ensp;Currency&emsp;&emsp;</a></li>
-					  <li><a href="#" onclick="return goto_nav('inflation');">&emsp;&emsp;&ensp;Inflation&emsp;&emsp;&emsp;</a></li>
-					  <li><a href="#" onclick="return goto_nav('dutyScenario');">&emsp;&emsp;&ensp;Duty Scenario&emsp;&emsp;</a></li>
-					  <li><a href="#" onclick="return goto_nav('standardProcess');">&emsp;&emsp;&ensp;Standard Process</a></li>                     
+					  <li><a href="#" onclick="return commodityData();">&emsp;&emsp;&ensp;Commodity Data&emsp;</a></li>
+					  <li><a href="#" onclick="return laborRate();">&emsp;&emsp;&ensp;Labor Rate&emsp;</a></li>
+					  <li><a href="#" onclick="return currency();">&emsp;&emsp;&ensp;Currency&emsp;</a></li>
+					  <li><a href="#" onclick="return inflation();">&emsp;&emsp;&ensp;Inflation&emsp;</a></li>
+					  <li><a href="#" onclick="return dutyScenario();">&emsp;&emsp;&ensp;Duty Scenario&emsp;</a></li>
+					  <li><a href="#" onclick="return standardProcess();">&emsp;&emsp;&ensp;Standard Process&emsp;</a></li>                     
 					 </ul>  										
 				</ul> 
 
@@ -83,9 +83,9 @@
                   <a href="#"><i class="fa fa-car fa-lg"></i> Costing Tool </a><span class="arrow"></span> 
                 </li>
                 <ul class="sub-menu collapse" id="costing_submenu">
-                  <li><a href="#" onclick="return goto_nav('methodology');">&emsp;Methodology&emsp;&emsp;</a></li>
-                  <li><a href="#" onclick="return goto_nav('costInput');">&emsp;Cost Input&emsp;&emsp;&emsp;</a></li>
-                  <li><a href="#" onclick="return goto_nav('costPriceEvolution');">&emsp;Cost Price Evolution</a></li>
+                  <li><a href="#" onclick="return methodology();">&emsp;Methodology&emsp;</a></li>
+                  <li><a href="#" onclick="return costInput();">&emsp;Cost Input&emsp;</a></li>
+                  <li><a href="#" onclick="return costPriceEvolution();">&emsp;Cost Price Evolution</a></li>
                 </ul>          
             </ul>
          </div>
@@ -113,17 +113,6 @@
     
     <script>
 	
-		$(document).ready(function(){
-			$(document).ajaxStart(function(){
-				$("#wait").css("display", "block");
-			});
-			$(document).ajaxComplete(function(){
-				$("#wait").css("display", "none");
-			});
-		});
-	
-
-
         function mainDashboardEntityLevel(){
                 $.ajax({
                     url: '{% url 'mainDashboardEntityLevel' %}',
@@ -138,31 +127,135 @@
                     url: '{% url 'mainDashboardVendorLevel' %}',
                     success: function (data) {
                         $('#main_body').html(data);
-                   }
+                    }
                 });
                }
-			   
-		function goto_nav(aLoc){
-			var urlLoc = '{% url 'standardProcess' %}'.replace('standardProcess', aLoc);
-            $.ajax({
-                    url: urlLoc,
+
+        function valueGrowth(){
+                $.ajax({
+                    url: '{% url 'valueGrowth' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+               }
+        
+        function moq(){
+                $.ajax({
+                    url: '{% url 'moq' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+               }
+        function leadTime(){
+                $.ajax({
+                    url: '{% url 'leadTime' %}',
                     success: function (data) {
                         $('#main_body').html(data);
                     }
                 });
         }
-		
+
+        function margin(){
+            $.ajax({
+                    url: '{% url 'margin' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function methodology(){
+            $.ajax({
+                    url: '{% url 'methodology' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function costInput(){
+            $.ajax({
+                    url: '{% url 'costInput' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function costPriceEvolution(){
+            $.ajax({
+                    url: '{% url 'costPriceEvolution' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function commodityData(){
+            $.ajax({
+                    url: '{% url 'commodityData' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function laborRate(){
+            $.ajax({
+                    url: '{% url 'laborRate' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function currency(){
+            $.ajax({
+                    url: '{% url 'currency' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function inflation(){
+            $.ajax({
+                    url: '{% url 'inflation' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function dutyScenario(){
+            $.ajax({
+                    url: '{% url 'dutyScenario' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+        function standardProcess(){
+            $.ajax({
+                    url: '{% url 'standardProcess' %}',
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+                });
+        }
+
+		/* show progress icon when loading ajax */
+		$(document).ready(function(){
+			$(document).ajaxStart(function(){
+				$("#wait").css("display", "block");
+			});
+			$(document).ajaxComplete(function(){
+				$("#wait").css("display", "none");
+			});
+		});
 	
 		/* show active selection in the side menu bar */
 		$('.sub-menu li').on('click', function(e){
 			e.preventDefault();
 			$('.sub-menu li').removeClass('active');
 			$(this).addClass('active');
-//			return goto_nav(this.id);
 		});
-	</script>
-	
-	
+
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

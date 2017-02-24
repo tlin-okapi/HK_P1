@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^costInput$', app.views.costInput, name='costInput'),
 	url(r'^costInputNav$', app.views.costInputNav, name='costInputNav'),
 	url(r'^costOutput', app.views.costOutput, name='costOutput'),
+	url(r'^costChart$', app.views.costChart, name='costChart'),	
     
 	url(r'^costPriceEvolution', app.views.costPriceEvolution, name='costPriceEvolution'),
     url(r'^commodityData', app.views.commodityData, name='commodityData'),

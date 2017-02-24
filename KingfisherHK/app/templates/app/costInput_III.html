@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" media="screen" /> 
+<link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.css' %}" media="screen" /> 
 <link rel="stylesheet" type="text/css" href="{% static 'app/content/cost.css' %}" media="screen" /> 
 <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
 <script src="{% static 'app/scripts/bootstrap.min.js' %}"></script>
@@ -41,7 +41,7 @@
 					<tr class="table_divider"></tr>
 					<tr>
 					   <td><strong>Material:&nbsp;</strong></td>
-					   <td><input type="text" id = "material" name="material"></td>
+					   <td class='output'><span id='raw_material'></span></td>
 					   <td class="row_divider"></td>
 					   <td><strong>Country of Destination:&nbsp;</strong></td>
 					   <td><input type="text" id = "country_destination" name="country_destination"></td>
@@ -72,7 +72,7 @@
 		</div>
 	</div>
 	
-	<div class ="divider row"></div>
+	<hr/>
 	
 	<div class="row">
 		<div class="col-md-2">
@@ -159,7 +159,7 @@
 		</div>
 		<div class="col-md-10">
 			<div class = "col-md-2">
-				<strong class = "title_box">Minute Linked Maring(per min)</strong>
+				<strong class = "title_box">Minute Linked Margin(per min)</strong>
 				<span class = "result_box" id ='minute_linked'></span>
 			</div>
 			<div class = 'frame'>
@@ -244,25 +244,36 @@
 
 {% block scripts %}
 <script type="text/javascript">
+	var product_code, cost_approach,product_name,vendor_name,product_type,country_origin,raw_material,country_destination,size,currency,labor_cost,material_cost,overhead_cost,margin_cost,transportation_cost,duty_cost;
     $(document).ready(function(){
-		
 		$("#btnCal").click(function(){
-			var product_code = $("#product_code").val();
-			var vendor_name = $("#vendor_name").val();
-			var country_origin = $("#country_origin").val();
-			var material = $("#material").val();
-			var country_destination = $("#country_destination").val();
-			var size = $("#size").val();
-			var currency = $("#currency").val();			
-			$.get("/costOutput/",{'product_code':product_code,'vendor_name':vendor_name,'country_origin':country_origin,'material':material,'country_destination':country_destination,'size':size,'currency':currency}, 	function(ret){
+			product_code = $("#product_code").val();
+			vendor_name = $("#vendor_name").val();
+			country_origin = $("#country_origin").val();
+			country_destination = $("#country_destination").val();
+			size = $("#size").val();
+			currency = $("#currency").val();			
+			$.get("/costOutput/",{'product_code':product_code,'vendor_name':vendor_name,'country_origin':country_origin,'country_destination':country_destination,'size':size,'currency':currency}, 	function(ret){
+					cost_approach=ret['cost_approach'];
+					product_name=ret['product_name'];
+					product_type=ret['product_type'];
+					raw_material=ret['raw_material'];
+					labor_cost=d3.format('.5f')(ret['labor_payout']);
+					material_cost=d3.format('.5f')(ret['bom_cost']);
+					overhead_cost=d3.format('.5f')(ret['overhead']);
+					margin_cost=d3.format('.5f')(ret['margin']);
+					transportation_cost=d3.format('.5f')(ret['transportation']);
+					duty_cost=d3.format('.5f')(ret['duty']);
+					
 					$('#cost_approach').html(ret['cost_approach']);
 					$('#product_name').html(ret['product_name']);
 					$('#product_type').html(ret['product_type']);
+					$('#raw_material').html(ret['raw_material']);
 					$('.standard_minutes').html(d3.format('.1f')(ret['standard_minutes']));
 					$('#wage_rate').html(d3.format('.2f')(ret['wage_rate']));
 					$('#efficiency_adjustment').html(d3.format('%')(ret['efficiency_adjustment']));
 					$('.labor_payout').html(d3.format('.1f')(ret['labor_payout']));
-					$('#material_cost').html(d3.format('.1f')(ret['material_cost']));
+					$('#material_cost').html(d3.format('.1f')(ret['material_cost']));					
 					$('#wastage_allowance').html(d3.format('.1f')(ret['wastage_allowance']));					
 					$('.bom_cost').html(d3.format('.1f')(ret['bom_cost']));
 					$('#final_cost').html(d3.format('.1f')(ret['final_cost']));
@@ -281,6 +292,7 @@
 					$('#cost_approach').html('');
 					$('#product_name').html('');
 					$('#product_type').html('');
+					$('#raw_material').html('');
 					$('.standard_minutes').html('');
 					$('#wage_rate').html('');
 					$('#efficiency_adjustment').html('');
@@ -301,6 +313,7 @@
 				})
 				
 		$("#btnPrevious").click(function(){costInput();})
+		$("#btnNext").click(function(){costInputChart();})		
 			
         function costInput(){
             $.ajax({
@@ -309,8 +322,18 @@
                         $('#main_body').html(data);
                     }
                 });
-        }		
+        }
 		
+        function costInputChart(){
+            $.ajax({
+                    url: '{% url 'costChart' %}',
+					data: {'product_code':product_code,'cost_approach':cost_approach,'product_name':product_name,'vendor_name':vendor_name,'product_type':product_type,'country_origin':country_origin,'raw_material':raw_material,'country_destination':country_destination,'size':size,'currency':currency,'labor_cost':labor_cost,'material_cost':material_cost,'overhead_cost':overhead_cost,'margin_cost':margin_cost,'transportation_cost':transportation_cost,'duty_cost':duty_cost},
+					type:"get",
+                    success: function (data) {
+                        $('#main_body').html(data);
+                    }
+				});
+        }		
 	});	
 </script>
 {% endblock %}

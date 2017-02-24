@@ -1,0 +1,192 @@
+﻿{% block content %}
+
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.css' %}" media="screen" /> 
+<link rel="stylesheet" type="text/css" href="{% static 'app/content/cost.css' %}" media="screen" /> 
+<script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
+<script src="{% static 'app/scripts/bootstrap.min.js' %}"></script>
+<script src="{% static 'app/scripts/d3.min.js' %}"></script>
+<h1>Cost Input</h1>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-10">
+			<table class="cost_input_table">
+				<tbody>
+					<tr>
+					   <td><strong>Product Code:&nbsp;</strong></td>
+					   <td class='output'><span id='product_code'>{{product_code}}</span></td>
+					   <td class="row_divider"></td>
+					   <td><strong>Cost Approach:&nbsp;</strong></td>
+					   <td class='output'><span id='cost_approach'>{{cost_approach}}</span></td>
+					</tr>
+					<tr class="table_divider"></tr>
+					<tr>
+					   <td><strong>Product Name:&nbsp;</strong></td>
+					   <td class='output'><span id='product_name'>{{product_name}}</span></td>
+					   <td class="row_divider"></td>
+					   <td><strong>Vendor Name:&nbsp;</strong></td>
+					   <td class='output'><span id='vendor_name'>{{vendor_name}}</span></td>
+					</tr>
+					<tr class="table_divider"></tr>
+					<tr>
+					   <td><strong>Product Type:&nbsp;</strong></td>
+					   <td class='output'><span id='product_type'>{{product_type}}</span></td>
+					   <td class="row_divider"></td>
+					   <td><strong>Country of Origin:&nbsp;</strong></td>
+					   <td class='output'><span id='country_origin'>{{country_origin}}</span></td>
+					</tr>
+					<tr class="table_divider"></tr>
+					<tr>
+					   <td><strong>Material:&nbsp;</strong></td>
+					   <td class='output'><span id='raw_material'>{{raw_material}}</span></td>
+					   <td class="row_divider"></td>
+					   <td><strong>Country of Destination:&nbsp;</strong></td>
+					   <td class='output'><span id='country_destination'>{{country_destination}}</span></td>					   
+					</tr>
+					<tr class="table_divider"></tr>
+					<tr>
+					   <td><strong>Size:&nbsp;</strong></td>
+					   <td class='output'><span id='size'>{{size}}</span></td>
+					   <td class="row_divider"></td>
+					   <td><strong>Currency:&nbsp;</strong></td>
+					   <td class='output'><span id='currency'>{{currency}}</span></td>
+					</tr>										
+				</tbody>
+			</table>		
+		</div>
+		<div class="col-md-2">
+			<div class="col-sm-8">
+				<div class ="divider row"></div>
+				<strong id = "title_box_FinalCost">Final Cost<br><span id="final_cost"></span></strong>				
+			</div>
+		</div>
+	</div>
+	<hr/>
+	<div class ="divider row"></div>
+	<div class="row">
+		<div class = "col-md-10" id="cost_chart"></div>
+		<div class = "col-md-2 btn_toolbar">
+			<button type="button" id="btnPrevious" class="btn_cost">Previous</button>
+			<button type="button" id="btnNext" class="btn_cost">Next</button>		
+		</div>		
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    $(document).ready(function(){
+	});
+	/*******************************************************
+	Step 1: Prepare Data 
+	********************************************************/
+
+	var data = {{ dataset|safe }};
+	console.log(data);
+	var total;
+	data.forEach(function(d){
+		total=+d.value;
+	});
+	
+	// Define size & radius of donut pie chart
+    var width = 600,
+      height = 800,
+      radius = 200;
+	
+	// Define arc colours
+    var colour = d3.scale.category20();
+	
+	// Define arc ranges
+    var arcText = d3.scale.ordinal()
+      .rangeRoundBands([0, width], .1, .3);
+	
+	// Determine size of arcs
+    var arc = d3.svg.arc()
+      .innerRadius(radius - 130)
+      .outerRadius(radius - 10);
+	  
+	// Create the donut pie chart layout
+    var pie = d3.layout.pie()
+      .value(function(d) {
+        return d.value;
+      })
+      .sort(null);
+	
+	// Append SVG attributes and append g to the SVG
+    var mySvg = d3.select('#cost_chart').append("svg")
+      .attr("width", width)
+      .attr("height", height);
+	  
+	var svg = mySvg
+      .append("g")
+      .attr("transform", "translate(" + radius + "," + radius + ")");
+
+    var svgText = mySvg
+      .append("g")
+      .attr("transform", "translate(" + radius + "," + radius + ")");
+	  
+	  
+    // Define inner circle
+    svg.append("circle")
+      .attr("cx", 0)
+      .attr("cy", 0)
+      .attr("r", 100)
+      .attr("fill", "#fff");
+
+    // Calculate SVG paths and fill in the colours
+    var g = svg.selectAll(".arc")
+      .data(pie(data))
+      .enter().append("g")
+      .attr("class", "arc");
+	  
+	 // Append the path to each g
+    var path = g.append("path")
+      .attr("d", arc)
+      //.attr("data-legend", function(d, i){ return parseInt(data[i].count) + ' ' + data[i].emote; })
+      .attr("fill", function(d, i) {
+        return colour(i);
+      });
+	 
+	var total = d3.sum(data.map(function(d) {                
+              return d.value;                                           
+            }));
+			
+    path.on('mouseover', function(d) {                                              
+            var percent = Math.round(1000 * d.data.value / total) / 10; 
+            //tooltip.select('.cat').html(d.data.cat);                
+            //tooltip.select('.value').html(d.data.value);                
+            //tooltip.select('.percent').html(percent + '%');  
+			console.log(d.data.cat);
+                          
+          });                                                           
+          
+    path.on('mouseout', function() {                              
+                         
+          });	
+	
+	var legendG = mySvg.selectAll(".legend")
+      .data(pie(data))
+      .enter().append("g")
+      .attr("transform", function(d,i){
+        return "translate(" + (width - 150) + "," + (i * 20 + 20) + ")";
+      })
+      .attr("class", "legend");   
+    
+    legendG.append("rect")
+      .attr("width", 15)
+      .attr("height", 15)
+      .attr("fill", function(d, i) {
+        return colour(i);
+      });
+    
+    legendG.append("text")
+      .text(function(d){
+        return " "+d.data.cat+ "  " +Math.round(1000 * d.data.value / total) / 10+'%';
+      })
+      .style("font-size", 15)
+      .attr("y", 12)
+      .attr("x", 20);
+</script>
+{% endblock %}

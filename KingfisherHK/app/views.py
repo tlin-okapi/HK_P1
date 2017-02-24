@@ -12,6 +12,7 @@ from django.http import HttpResponse
 import json
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
+from django.shortcuts import render_to_response
 
 def home(request):
     """Renders the home page."""
@@ -218,23 +219,30 @@ def costInputNav(request):
 	)
 
 def costInput(request):
-    """Renders the Margin page."""
-    assert isinstance(request, HttpRequest)
-    return render(
-        request,
-        'app/costInput.html',
-        {
-            'title':'Cost Input',
-            'year':datetime.now().year,
-        }
-    )	
+	"""Renders the Margin page."""
+	assert isinstance(request, HttpRequest)
+	product_code = 'a'
+	cost_approach='a'
+	product_name='a'
+	vendor_name='a'
+	product_type='a'
+	country_origin='a'
+	raw_material='a'
+	country_destination='a'
+	size='a'
+	currency='a'
+	dataset=json.dumps([{'cat':'Labor','value':1},{'cat':'Material','value':2},{'cat':'Overhead','value':3},{'cat':'Margin','value':4},{'cat':'Up lift to Landed','value':5},{'cat':'Duty','value':6}])
+	year=datetime.now().year,
+	website='app/costInput_III_Chart.html';
+	
+	return render_to_response(website, locals())	
 	
 
 def costOutput(request):
 	product_code_input = request.GET['product_code']
 	vendor_name_input = request.GET['vendor_name']
 	country_origin_input = request.GET['country_origin']
-	material_input = request.GET['material']
+	#material_input = request.GET['material']
 	country_destination_input = request.GET['country_destination']
 	size = request.GET['size']
 	currency = request.GET['currency']
@@ -250,7 +258,7 @@ def costOutput(request):
 	wage_dict=model_to_dict(Table_wage,fields=['wage_rate'])
 	Table_vendor = CostAppVendor.objects.get(vendor_name=vendor_name_input)
 	vendor_dict=model_to_dict(Table_vendor,fields=['efficiency_adjustment'])
-	Table_duty = CostAppDuty.objects.get(country_of_origin=country_origin_input,country_of_destination=country_destination_input,material=material_input)
+	Table_duty = CostAppDuty.objects.get(country_of_origin=country_origin_input,country_of_destination=country_destination_input,material=str(cost_dict['raw_material']))
 	duty_dict=model_to_dict(Table_duty,fields=['transportation','duty_rate'])
 	
 	labor_payout=float(cost_dict['standard_minutes'])*float(wage_dict['wage_rate'])*float(vendor_dict['efficiency_adjustment'])
@@ -270,6 +278,7 @@ def costOutput(request):
 									'wastage_allowance': cost_dict['wastage_allowance'],
 									'overhead':cost_dict['overhead'],
 									'material_cost':cost_dict['material_cost'],
+									'raw_material':cost_dict['raw_material'],
 									#'commodity_change':commodity_dict['change'],
 									'wage_rate':wage_dict['wage_rate'],
 									'efficiency_adjustment':vendor_dict['efficiency_adjustment'],
@@ -281,6 +290,29 @@ def costOutput(request):
 									'duty':duty,
 									'fob':fob,
 									'final_cost':final_cost}),content_type='application/json')
+									
+def costChart(request):
+	assert isinstance(request, HttpRequest)
+	product_code = request.GET['product_code']
+	cost_approach=request.GET['cost_approach']
+	product_name=request.GET['product_name']
+	vendor_name=request.GET['vendor_name']
+	product_type=request.GET['product_type']
+	country_origin=request.GET['country_origin']
+	raw_material=request.GET['raw_material']
+	country_destination=request.GET['country_destination']
+	size=request.GET['size']
+	currency=request.GET['currency']
+	dataset=json.dumps([{'cat':'Labor','value':float(request.GET['labor_cost'])},{'cat':'Material','value':float(request.GET['material_cost'])},{'cat':'Overhead','value':float(request.GET['overhead_cost'])},{'cat':'Margin','value':float(request.GET['margin_cost'])},{'cat':'Up lift to Landed','value':float(request.GET['transportation_cost'])},{'cat':'Duty','value':float(request.GET['duty_cost'])}])
+
+	year=datetime.now().year,
+	
+	if cost_approach == 'Level III':
+		website='app/costInput_III_Chart.html';
+	else:
+		website='app/costInput_working.html';
+	
+	return render_to_response(website, locals())
 	
 def costPriceEvolution(request):
     """Renders the Margin page."""

@@ -190,6 +190,6 @@ class CurrencyYearly(models.Model):
 	country = models.CharField(max_length =30)
 	Status = models.CharField(max_length =30)
 	Year = models.IntegerField()
-	Rate = models.DecimalField(max_digits=13, decimal_places=10)	
+	Rate = models.DecimalField(max_digits=13, decimal_places=5)	
 
 
